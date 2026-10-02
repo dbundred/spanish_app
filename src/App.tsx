@@ -13,6 +13,8 @@ import { SettingsModal } from './components/SettingsModal';
 import { ProfileSyncModal } from './components/ProfileSyncModal';
 import './index.css';
 
+const getTodayKey = () => `lingvist_session_${new Date().toISOString().slice(0, 10)}`;
+
 export function App() {
   const [currentTab, setCurrentTab] = useState<'practice' | 'words' | 'analytics'>('practice');
   const [settings, setSettings] = useState<AppSettings>({
@@ -47,46 +49,77 @@ export function App() {
     setLoading(true);
     await initializeDatabase();
     
-    // Attempt background sync with server
+    // Attempt background sync
     await syncService.syncBidirectional();
     setProfile(syncService.getActiveProfile());
 
     const appSettings = await getSettings();
     setSettings(appSettings);
 
-    await loadNewSession(appSettings.dailyGoal);
+    await loadNewSession(appSettings.dailyGoal, false);
     setLoading(false);
   };
 
-  const loadNewSession = async (goal: number) => {
+  const loadNewSession = async (goal: number, forceReset: boolean = false) => {
     const newQueue = await generateSessionQueue(goal);
     setQueue(newQueue);
+
+    // Check if session progress already exists for today so counter never resets on tab switch / refresh
+    const savedState = localStorage.getItem(getTodayKey());
+    if (savedState && !forceReset) {
+      try {
+        const parsed = JSON.parse(savedState);
+        const idx = Math.min(newQueue.length > 0 ? newQueue.length - 1 : 0, parsed.currentIndex || 0);
+        setCurrentIndex(idx);
+        setCardsCompletedSession(parsed.cardsCompleted || 0);
+        setCorrectFirstTrySession(parsed.correctFirstTry || 0);
+        setIsSessionFinished(parsed.isFinished || false);
+        return;
+      } catch {
+        // Fallback
+      }
+    }
+
     setCurrentIndex(0);
     setCardsCompletedSession(0);
     setCorrectFirstTrySession(0);
     setIsSessionFinished(false);
+    localStorage.removeItem(getTodayKey());
   };
 
   const handleCardSubmit = async (firstTryCorrect: boolean) => {
     if (currentIndex >= queue.length) return;
 
     const currentCard = queue[currentIndex];
+    // Permanently record attempt in IndexedDB
     await recordCardAttempt(currentCard.id, firstTryCorrect);
 
-    // Trigger debounced cross-device push to server
+    // Trigger debounced cross-device push to cloud
     syncService.triggerDebouncedPush();
 
-    setCardsCompletedSession(prev => prev + 1);
+    const nextCompleted = cardsCompletedSession + 1;
+    const nextCorrect = firstTryCorrect ? correctFirstTrySession + 1 : correctFirstTrySession;
+    const nextIdx = currentIndex + 1;
+    const isFinished = nextIdx >= queue.length;
+
+    setCardsCompletedSession(nextCompleted);
     if (firstTryCorrect) {
-      setCorrectFirstTrySession(prev => prev + 1);
+      setCorrectFirstTrySession(nextCorrect);
     }
 
-    const nextIdx = currentIndex + 1;
-    if (nextIdx >= queue.length) {
+    if (isFinished) {
       setIsSessionFinished(true);
     } else {
       setCurrentIndex(nextIdx);
     }
+
+    // Persist session progress in localStorage so switching tabs or refreshing phone browser never loses count
+    localStorage.setItem(getTodayKey(), JSON.stringify({
+      currentIndex: nextIdx,
+      cardsCompleted: nextCompleted,
+      correctFirstTry: nextCorrect,
+      isFinished
+    }));
   };
 
   const currentCard = queue[currentIndex];
@@ -121,7 +154,7 @@ export function App() {
             <SessionComplete
               cardsCompleted={cardsCompletedSession}
               correctFirstTryCount={correctFirstTrySession}
-              onStartNewSession={() => loadNewSession(settings.dailyGoal)}
+              onStartNewSession={() => loadNewSession(settings.dailyGoal, true)}
             />
           ) : currentCard ? (
             <PracticeCard
@@ -159,7 +192,7 @@ export function App() {
           onClose={() => setIsSettingsOpen(false)}
           onSettingsUpdated={newSet => {
             setSettings(newSet);
-            loadNewSession(newSet.dailyGoal);
+            loadNewSession(newSet.dailyGoal, true);
           }}
         />
       )}

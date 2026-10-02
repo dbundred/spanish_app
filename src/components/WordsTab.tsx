@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db, getDeckStats, type DeckStats } from '../services/db';
 import type { CombinedWordData, UserProgress } from '../types';
 import { audioService } from '../services/audio';
-import { Search, Volume2, Sparkles } from 'lucide-react';
+import { Search, Volume2, Sparkles, Target, ShieldCheck } from 'lucide-react';
 
 interface WordsTabProps {
   onSelectWordDetail: (word: CombinedWordData) => void;
@@ -67,20 +67,48 @@ export const WordsTab: React.FC<WordsTabProps> = ({ onSelectWordDetail }) => {
 
   return (
     <div className="words-tab-container">
+      {/* 6,000 Words Benchmark Overview Banner */}
+      <div
+        style={{
+          background: 'linear-gradient(135deg, rgba(20, 184, 166, 0.12), rgba(2, 132, 199, 0.1))',
+          border: '1px solid var(--accent-teal)',
+          borderRadius: '16px',
+          padding: '18px 20px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, fontSize: '17px', color: 'var(--accent-teal-dark)' }}>
+            <Target size={22} />
+            <span>Target Fluency Benchmark: 6,000 Words</span>
+          </div>
+          <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--accent-green)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <ShieldCheck size={14} /> Progress Auto-Saved
+          </span>
+        </div>
+
+        <p style={{ fontSize: '13px', color: 'var(--text-primary)', lineHeight: 1.5 }}>
+          Linguists estimate that mastering the <strong>top ~6,000 words</strong> provides 98% comprehension of spoken and written Spanish. Lingvist introduces vocabulary in strict real-world frequency order (starting with core pronouns and high-frequency conjugated verbs).
+        </p>
+      </div>
+
+      {/* Top Deck Stats Counter Cards */}
       <div className="stats-summary-grid">
         <div className="stat-card">
-          <span className="stat-value">{stats?.totalWords || 0}</span>
-          <span className="stat-label">Total Database</span>
+          <span className="stat-value" style={{ color: 'var(--text-primary)' }}>6,000</span>
+          <span className="stat-label">Fluency Goal</span>
         </div>
         <div
           className="stat-card"
-          style={{ cursor: 'pointer', borderColor: statusFilter === 'unseen' ? 'var(--accent-teal)' : undefined }}
-          onClick={() => setStatusFilter('unseen')}
+          style={{ cursor: 'pointer', borderColor: statusFilter === 'all' ? 'var(--accent-teal)' : undefined }}
+          onClick={() => setStatusFilter('all')}
         >
-          <span className="stat-value" style={{ color: 'var(--accent-teal)' }}>
-            {stats?.unseenCount || 0}
+          <span className="stat-value" style={{ color: 'var(--text-secondary)' }}>
+            {stats?.totalWords || 0}
           </span>
-          <span className="stat-label">Unseen (Priority)</span>
+          <span className="stat-label">In Curriculum</span>
         </div>
         <div
           className="stat-card"
@@ -104,25 +132,27 @@ export const WordsTab: React.FC<WordsTabProps> = ({ onSelectWordDetail }) => {
         </div>
       </div>
 
+      {/* Unseen Importance Banner */}
       {statusFilter === 'unseen' && (
         <div
           style={{
-            background: 'linear-gradient(135deg, rgba(20, 184, 166, 0.12), rgba(2, 132, 199, 0.12))',
-            border: '1px solid var(--accent-teal)',
-            borderRadius: '14px',
-            padding: '14px 18px',
+            background: 'var(--bg-card-subtle)',
+            border: '1px solid var(--border-color)',
+            borderRadius: '12px',
+            padding: '12px 16px',
             display: 'flex',
             alignItems: 'center',
-            gap: '12px'
+            gap: '10px'
           }}
         >
-          <Sparkles style={{ color: 'var(--accent-teal)', flexShrink: 0 }} size={22} />
-          <div style={{ fontSize: '14px', color: 'var(--text-primary)', fontWeight: 600 }}>
-            <strong>Unseen Priority Deck:</strong> Displayed strictly in order of Spanish frequency rank (#1 most essential first).
+          <Sparkles style={{ color: 'var(--accent-teal)', flexShrink: 0 }} size={18} />
+          <div style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+            Showing remaining <strong>Unseen Words</strong> sorted by Spanish frequency rank (#1 most essential first).
           </div>
         </div>
       )}
 
+      {/* Search and Filters Bar */}
       <div className="search-filter-bar">
         <div className="search-input-wrapper">
           <Search size={18} className="search-icon" />
@@ -141,7 +171,7 @@ export const WordsTab: React.FC<WordsTabProps> = ({ onSelectWordDetail }) => {
           onChange={e => setStatusFilter(e.target.value)}
         >
           <option value="unseen">⭐ Unseen (Most Important First)</option>
-          <option value="all">All Words in Deck</option>
+          <option value="all">All Words in Curriculum</option>
           <option value="learning">Learning Deck</option>
           <option value="learned">Learned Deck</option>
         </select>
@@ -151,7 +181,7 @@ export const WordsTab: React.FC<WordsTabProps> = ({ onSelectWordDetail }) => {
           value={sortBy}
           onChange={e => setSortBy(e.target.value as 'frequency' | 'alphabetical')}
         >
-          <option value="frequency">Sort by Importance (Rank #1...)</option>
+          <option value="frequency">Sort by Frequency Rank (#1, #2...)</option>
           <option value="alphabetical">Sort Alphabetically (A-Z)</option>
         </select>
 
@@ -169,6 +199,7 @@ export const WordsTab: React.FC<WordsTabProps> = ({ onSelectWordDetail }) => {
         </select>
       </div>
 
+      {/* Word List Table */}
       <div className="word-list-container">
         <div className="word-row word-row-header" style={{ gridTemplateColumns: '70px 1.5fr 1.5fr 80px 100px 40px' }}>
           <span>Rank</span>

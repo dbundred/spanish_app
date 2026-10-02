@@ -1,6 +1,6 @@
 import type { SpanishWord, PartOfSpeech, CEFRLevel } from '../types';
 
-export const INITIAL_SPANISH_WORDS: SpanishWord[] = [
+export const CORE_SPANISH_WORDS: SpanishWord[] = [
   // 1-7: Fundamental Personal Pronouns
   {
     id: 'w-1',
@@ -35,7 +35,7 @@ export const INITIAL_SPANISH_WORDS: SpanishWord[] = [
     sentenceEs: '___ habla inglés muy bien.',
     sentenceEn: 'He speaks English very well.',
     sentenceEnLiteral: 'He speaks english very well.',
-    hint: '3rd person masculine pronoun (with accent)',
+    hint: '3rd person masculine pronoun',
     frequencyRank: 3
   },
   {
@@ -159,7 +159,7 @@ export const INITIAL_SPANISH_WORDS: SpanishWord[] = [
     sentenceEs: 'Hoy ___ muy contento con los resultados.',
     sentenceEn: 'Today I am very happy with the results.',
     sentenceEnLiteral: 'Today I am very happy with the results.',
-    hint: 'verb: estar (presente: yo - state)',
+    hint: 'verb: estar (presente: yo - mood)',
     frequencyRank: 13
   },
   {
@@ -477,7 +477,7 @@ export const INITIAL_SPANISH_WORDS: SpanishWord[] = [
     frequencyRank: 38
   },
 
-  // 39-40: SABER (to know facts/skills) - Conjugated
+  // 39-40: SABER (to know) - Conjugated
   {
     id: 'w-39',
     spanish: 'sé',
@@ -487,7 +487,7 @@ export const INITIAL_SPANISH_WORDS: SpanishWord[] = [
     sentenceEs: 'Yo no ___ cómo se llama esa calle.',
     sentenceEn: 'I do not know what that street is called.',
     sentenceEnLiteral: 'I not know how itself calls that street.',
-    hint: 'verb: saber (presente: yo - with accent)',
+    hint: 'verb: saber (presente: yo)',
     frequencyRank: 39
   },
   {
@@ -741,7 +741,7 @@ export const INITIAL_SPANISH_WORDS: SpanishWord[] = [
     sentenceEs: '¿___ quieres hacer este fin de semana?',
     sentenceEn: 'What do you want to do this weekend?',
     sentenceEnLiteral: 'What want you to to do this weekend?',
-    hint: 'question word (with accent)',
+    hint: 'question word',
     frequencyRank: 59
   },
   {
@@ -753,7 +753,7 @@ export const INITIAL_SPANISH_WORDS: SpanishWord[] = [
     sentenceEs: '¿___ te llamas?',
     sentenceEn: 'What is your name? (How do you call yourself?)',
     sentenceEnLiteral: 'How yourself you call?',
-    hint: 'question word (with accent)',
+    hint: 'question word',
     frequencyRank: 60
   },
   {
@@ -815,7 +815,7 @@ export const INITIAL_SPANISH_WORDS: SpanishWord[] = [
     sentenceEs: '___ , estoy totalmente de acuerdo.',
     sentenceEn: 'Yes, I totally agree.',
     sentenceEnLiteral: 'Yes, I am totally of agreement.',
-    hint: 'affirmation (with accent)',
+    hint: 'affirmation',
     frequencyRank: 65
   },
   {
@@ -880,38 +880,119 @@ export const INITIAL_SPANISH_WORDS: SpanishWord[] = [
   }
 ];
 
+// Rich expansion dataset: Top Spanish Vocabulary covering A1, A2, B1, B2
+const EXPANSION_VOCABULARY: Array<{
+  es: string; en: string; pos: PartOfSpeech; level: CEFRLevel;
+  sEs: string; sEn: string; hint: string;
+}> = [
+  { es: 'hoy', en: 'today', pos: 'noun', level: 'A1', sEs: '___ hace un día hermoso.', sEn: 'Today is a beautiful day.', hint: 'present day' },
+  { es: 'mañana', en: 'tomorrow', pos: 'noun', level: 'A1', sEs: 'Nos vemos ___ en clase.', sEn: 'See you tomorrow in class.', hint: 'next day' },
+  { es: 'ayer', en: 'yesterday', pos: 'noun', level: 'A1', sEs: '___ fue un día largo.', sEn: 'Yesterday was a long day.', hint: 'past day' },
+  { es: 'aquí', en: 'here', pos: 'adverb', level: 'A1', sEs: 'Ven ___ , por favor.', sEn: 'Come here, please.', hint: 'place adverb' },
+  { es: 'allí', en: 'there', pos: 'adverb', level: 'A1', sEs: 'El hotel está ___ enfrente.', sEn: 'The hotel is right over there.', hint: 'place adverb' },
+  { es: 'siempre', en: 'always', pos: 'adverb', level: 'A1', sEs: 'Él ___ dice la verdad.', sEn: 'He always tells the truth.', hint: 'frequency adverb' },
+  { es: 'nunca', en: 'never', pos: 'adverb', level: 'A1', sEs: 'Yo ___ llego tarde.', sEn: 'I never arrive late.', hint: 'negative adverb' },
+  { es: 'también', en: 'also / too', pos: 'adverb', level: 'A1', sEs: 'A mí ___ me gusta el café.', sEn: 'I also like coffee.', hint: 'addition adverb' },
+  { es: 'tampoco', en: 'neither / not either', pos: 'adverb', level: 'A1', sEs: 'Yo ___ sé la respuesta.', sEn: 'I don’t know the answer either.', hint: 'negative addition' },
+  { es: 'casa', en: 'house / home', pos: 'noun', level: 'A1', sEs: 'Voy a mi ___ a descansar.', sEn: 'I am going home to rest.', hint: 'feminine noun' },
+  { es: 'amigo', en: 'friend', pos: 'noun', level: 'A1', sEs: 'Carlos es mi mejor ___ .', sEn: 'Carlos is my best friend.', hint: 'masculine noun' },
+  { es: 'tiempo', en: 'time / weather', pos: 'noun', level: 'A1', sEs: 'No tengo mucho ___ hoy.', sEn: 'I don’t have much time today.', hint: 'masculine noun' },
+  { es: 'trabajo', en: 'job / work', pos: 'noun', level: 'A1', sEs: 'Ella tiene un buen ___ .', sEn: 'She has a good job.', hint: 'masculine noun' },
+  { es: 'agua', en: 'water', pos: 'noun', level: 'A1', sEs: 'Un vaso de ___ , por favor.', sEn: 'A glass of water, please.', hint: 'noun (el agua)' },
+  { es: 'comida', en: 'food / meal', pos: 'noun', level: 'A1', sEs: 'La ___ está muy rica.', sEn: 'The food is very tasty.', hint: 'feminine noun' },
+  { es: 'grande', en: 'big / large', pos: 'adjective', level: 'A1', sEs: 'Tienen una casa muy ___ .', sEn: 'They have a very big house.', hint: 'size adjective' },
+  { es: 'pequeño', en: 'small / little', pos: 'adjective', level: 'A1', sEs: 'El perro es muy ___ .', sEn: 'The dog is very small.', hint: 'size adjective' },
+  { es: 'nuevo', en: 'new', pos: 'adjective', level: 'A1', sEs: 'Me compré un teléfono ___ .', sEn: 'I bought myself a new phone.', hint: 'masculine adjective' },
+  { es: 'bueno', en: 'good', pos: 'adjective', level: 'A1', sEs: 'Es un ___ momento para hablar.', sEn: 'It is a good time to talk.', hint: 'quality adjective' },
+  { es: 'malo', en: 'bad', pos: 'adjective', level: 'A1', sEs: 'No es un ___ plan.', sEn: 'It is not a bad plan.', hint: 'quality adjective' },
+  { es: 'persona', en: 'person', pos: 'noun', level: 'A1', sEs: 'Ella es una ___ muy amable.', sEn: 'She is a very kind person.', hint: 'feminine noun' },
+  { es: 'mundo', en: 'world', pos: 'noun', level: 'A1', sEs: 'Viajó por todo el ___ .', sEn: 'He traveled all over the world.', hint: 'masculine noun' },
+  { es: 'vida', en: 'life', pos: 'noun', level: 'A1', sEs: 'Disfruta de la ___ cada día.', sEn: 'Enjoy life every day.', hint: 'feminine noun' },
+  { es: 'mano', en: 'hand', pos: 'noun', level: 'A1', sEs: 'Levanta la ___ para preguntar.', sEn: 'Raise your hand to ask.', hint: 'feminine noun' },
+  { es: 'día', en: 'day', pos: 'noun', level: 'A1', sEs: '¡Que tengas un buen ___ !', sEn: 'Have a good day!', hint: 'masculine noun' },
+  { es: 'año', en: 'year', pos: 'noun', level: 'A1', sEs: 'Este ___ va a ser extraordinario.', sEn: 'This year is going to be extraordinary.', hint: 'masculine noun' },
+  { es: 'escribir', en: 'to write', pos: 'verb', level: 'A1', sEs: 'Me encanta ___ cartas a mano.', sEn: 'I love to write letters by hand.', hint: 'infinitive verb' },
+  { es: 'leer', en: 'to read', pos: 'verb', level: 'A1', sEs: 'Suelo ___ libros por la noche.', sEn: 'I usually read books at night.', hint: 'infinitive verb' },
+  { es: 'escuchar', en: 'to listen to', pos: 'verb', level: 'A1', sEs: 'Debes ___ con atención.', sEn: 'You must listen attentively.', hint: 'infinitive verb' },
+  { es: 'camino', en: 'way / path', pos: 'noun', level: 'A2', sEs: 'Este ___ lleva a la montaña.', sEn: 'This path leads to the mountain.', hint: 'masculine noun' },
+  { es: 'verdad', en: 'truth', pos: 'noun', level: 'A2', sEs: 'Siempre di la ___ .', sEn: 'Always tell the truth.', hint: 'feminine noun' },
+  { es: 'problema', en: 'problem', pos: 'noun', level: 'A1', sEs: 'No hay ningún ___ aquí.', sEn: 'There is no problem here.', hint: 'masculine noun' },
+  { es: 'sistema', en: 'system', pos: 'noun', level: 'A2', sEs: 'El ___ está funcionando bien.', sEn: 'The system is working well.', hint: 'masculine noun' },
+  { es: 'pregunta', en: 'question', pos: 'noun', level: 'A1', sEs: 'Tengo una ___ importante.', sEn: 'I have an important question.', hint: 'feminine noun' },
+  { es: 'respuesta', en: 'answer / response', pos: 'noun', level: 'A1', sEs: 'Espera la ___ correcta.', sEn: 'Wait for the correct answer.', hint: 'feminine noun' },
+  { es: 'país', en: 'country', pos: 'noun', level: 'A1', sEs: 'España es un ___ hermoso.', sEn: 'Spain is a beautiful country.', hint: 'masculine noun' },
+  { es: 'familia', en: 'family', pos: 'noun', level: 'A1', sEs: 'La ___ es lo más valioso.', sEn: 'Family is the most valuable thing.', hint: 'feminine noun' },
+  { es: 'grupo', en: 'group', pos: 'noun', level: 'A1', sEs: 'Un ___ de estudiantes vino hoy.', sEn: 'A group of students came today.', hint: 'masculine noun' },
+  { es: 'ciudad', en: 'city', pos: 'noun', level: 'A2', sEs: 'Barcelona es una ___ cosmopolita.', sEn: 'Barcelona is a cosmopolitan city.', hint: 'feminine noun' },
+  { es: 'viaje', en: 'trip / journey', pos: 'noun', level: 'A2', sEs: '¡Buen ___ a todos!', sEn: 'Have a good trip everyone!', hint: 'masculine noun' },
+  { es: 'lugar', en: 'place', pos: 'noun', level: 'A2', sEs: 'Este es un ___ tranquilo.', sEn: 'This is a quiet place.', hint: 'masculine noun' },
+  { es: 'seguro', en: 'safe / sure', pos: 'adjective', level: 'A2', sEs: '¿Estás ___ de tu respuesta?', sEn: 'Are you sure about your answer?', hint: 'certainty' },
+  { es: 'después', en: 'after / later', pos: 'preposition', level: 'A1', sEs: 'Nos vemos ___ de comer.', sEn: 'See you after eating.', hint: 'time marker' },
+  { es: 'antes', en: 'before', pos: 'preposition', level: 'A1', sEs: 'Llega ___ de las ocho.', sEn: 'Arrive before eight.', hint: 'time marker' },
+  { es: 'fácil', en: 'easy', pos: 'adjective', level: 'A1', sEs: 'Este ejercicio es muy ___ .', sEn: 'This exercise is very easy.', hint: 'difficulty' },
+  { es: 'difícil', en: 'difficult / hard', pos: 'adjective', level: 'A1', sEs: 'La gramática no es tan ___ .', sEn: 'Grammar is not that hard.', hint: 'difficulty' },
+  { es: 'rápido', en: 'fast / quick', pos: 'adjective', level: 'A1', sEs: 'El tren es muy ___ .', sEn: 'The train is very fast.', hint: 'speed' },
+  { es: 'lento', en: 'slow', pos: 'adjective', level: 'A1', sEs: 'El tráfico va muy ___ .', sEn: 'Traffic is moving very slowly.', hint: 'speed' },
+  { es: 'temprano', en: 'early', pos: 'adverb', level: 'A2', sEs: 'Me despierto ___ cada día.', sEn: 'I wake up early every day.', hint: 'time' },
+  { es: 'tarde', en: 'late / afternoon', pos: 'adverb', level: 'A1', sEs: 'Buenas ___ a todos.', sEn: 'Good afternoon everyone.', hint: 'time' },
+  { es: 'noche', en: 'night', pos: 'noun', level: 'A1', sEs: 'Buenas ___ y que descanses.', sEn: 'Good night and rest well.', hint: 'time' },
+  { es: 'mañana', en: 'morning', pos: 'noun', level: 'A1', sEs: 'Por la ___ tomo café.', sEn: 'In the morning I drink coffee.', hint: 'time' },
+  { es: 'semana', en: 'week', pos: 'noun', level: 'A1', sEs: 'Esta ___ tengo exámenes.', sEn: 'This week I have exams.', hint: 'calendar' },
+  { es: 'mes', en: 'month', pos: 'noun', level: 'A1', sEs: 'El próximo ___ viajo a México.', sEn: 'Next month I travel to Mexico.', hint: 'calendar' },
+  { es: 'hora', en: 'hour / time', pos: 'noun', level: 'A1', sEs: '¿Qué ___ es, por favor?', sEn: 'What time is it, please?', hint: 'clock' },
+  { es: 'minuto', en: 'minute', pos: 'noun', level: 'A1', sEs: 'Espera un ___ aquí.', sEn: 'Wait a minute here.', hint: 'clock' },
+  { es: 'segundo', en: 'second', pos: 'noun', level: 'A1', sEs: 'Solo dame un ___ .', sEn: 'Just give me a second.', hint: 'clock' },
+  { es: 'dinero', en: 'money', pos: 'noun', level: 'A1', sEs: 'No llevo mucho ___ encima.', sEn: 'I don’t carry much money on me.', hint: 'noun' },
+  { es: 'precio', en: 'price', pos: 'noun', level: 'A2', sEs: 'El ___ es muy razonable.', sEn: 'The price is very reasonable.', hint: 'noun' },
+  { es: 'tienda', en: 'shop / store', pos: 'noun', level: 'A1', sEs: 'La ___ abre a las diez.', sEn: 'The shop opens at ten.', hint: 'noun' },
+  { es: 'comprar', en: 'to buy', pos: 'verb', level: 'A1', sEs: 'Voy a ___ pan fresco.', sEn: 'I am going to buy fresh bread.', hint: 'verb' },
+  { es: 'pagar', en: 'to pay', pos: 'verb', level: 'A1', sEs: '¿Puedo ___ con tarjeta?', sEn: 'Can I pay by card?', hint: 'verb' },
+  { es: 'abierto', en: 'open', pos: 'adjective', level: 'A1', sEs: 'El museo está ___ hoy.', sEn: 'The museum is open today.', hint: 'state' },
+  { es: 'cerrado', en: 'closed', pos: 'adjective', level: 'A1', sEs: 'El banco está ___ los domingos.', sEn: 'The bank is closed on Sundays.', hint: 'state' },
+  { es: 'calle', en: 'street', pos: 'noun', level: 'A1', sEs: 'Cruza la ___ con cuidado.', sEn: 'Cross the street carefully.', hint: 'location' },
+  { es: 'puerta', en: 'door', pos: 'noun', level: 'A1', sEs: 'Cierra la ___ al salir.', sEn: 'Close the door when leaving.', hint: 'object' },
+  { es: 'ventana', en: 'window', pos: 'noun', level: 'A1', sEs: 'Abre la ___ para que entre aire.', sEn: 'Open the window to let air in.', hint: 'object' },
+  { es: 'coche', en: 'car', pos: 'noun', level: 'A1', sEs: 'Dejé el ___ en el garaje.', sEn: 'I left the car in the garage.', hint: 'vehicle' },
+  { es: 'tren', en: 'train', pos: 'noun', level: 'A1', sEs: 'El ___ llega puntual.', sEn: 'The train arrives on time.', hint: 'vehicle' },
+  { es: 'avión', en: 'airplane', pos: 'noun', level: 'A2', sEs: 'El ___ despega pronto.', sEn: 'The plane takes off soon.', hint: 'vehicle' },
+  { es: 'hotel', en: 'hotel', pos: 'noun', level: 'A1', sEs: 'Nos alojamos en un buen ___ .', sEn: 'We stayed at a good hotel.', hint: 'accommodation' },
+  { es: 'habitación', en: 'room', pos: 'noun', level: 'A1', sEs: 'Mi ___ tiene vista al jardín.', sEn: 'My room has a garden view.', hint: 'noun' },
+  { es: 'cama', en: 'bed', pos: 'noun', level: 'A1', sEs: 'La ___ es muy cómoda.', sEn: 'The bed is very comfortable.', hint: 'furniture' },
+  { es: 'mesa', en: 'table', pos: 'noun', level: 'A1', sEs: 'Pon los platos en la ___ .', sEn: 'Put the plates on the table.', hint: 'furniture' },
+  { es: 'silla', en: 'chair', pos: 'noun', level: 'A1', sEs: 'Toma asiento en esta ___ .', sEn: 'Take a seat on this chair.', hint: 'furniture' },
+  { es: 'libro', en: 'book', pos: 'noun', level: 'A1', sEs: 'Este ___ me encanta.', sEn: 'I love this book.', hint: 'reading' },
+  { es: 'palabra', en: 'word', pos: 'noun', level: 'A1', sEs: '¿Qué significa esta ___ ?', sEn: 'What does this word mean?', hint: 'language' },
+  { es: 'idioma', en: 'language', pos: 'noun', level: 'A1', sEs: 'El español es un ___ hermoso.', sEn: 'Spanish is a beautiful language.', hint: 'masculine noun' },
+  { es: 'escuela', en: 'school', pos: 'noun', level: 'A1', sEs: 'Los niños van a la ___ .', sEn: 'Children go to school.', hint: 'education' },
+  { es: 'universidad', en: 'university', pos: 'noun', level: 'A2', sEs: 'Estudia derecho en la ___ .', sEn: 'She studies law at university.', hint: 'education' },
+  { es: 'profesor', en: 'teacher / professor', pos: 'noun', level: 'A1', sEs: 'Nuestro ___ explica muy bien.', sEn: 'Our teacher explains very well.', hint: 'profession' },
+  { es: 'médico', en: 'doctor', pos: 'noun', level: 'A1', sEs: 'Tengo cita con el ___ mañana.', sEn: 'I have an appointment with the doctor tomorrow.', hint: 'health' },
+  { es: 'hospital', en: 'hospital', pos: 'noun', level: 'A1', sEs: 'El ___ está a dos kilómetros.', sEn: 'The hospital is two kilometers away.', hint: 'health' },
+  { es: 'salud', en: 'health', pos: 'noun', level: 'A2', sEs: '¡Por la ___ de todos!', sEn: 'To everyone’s health!', hint: 'wellbeing' },
+  { es: 'cuerpo', en: 'body', pos: 'noun', level: 'A2', sEs: 'Es bueno cuidar el ___ .', sEn: 'It is good to take care of the body.', hint: 'anatomy' },
+  { es: 'cabeza', en: 'head', pos: 'noun', level: 'A1', sEs: 'Me duele la ___ hoy.', sEn: 'My head hurts today.', hint: 'anatomy' },
+  { es: 'ojo', en: 'eye', pos: 'noun', level: 'A1', sEs: 'Tiene los ___ verdes.', sEn: 'She has green eyes.', hint: 'anatomy' },
+  { es: 'feliz', en: 'happy', pos: 'adjective', level: 'A1', sEs: '¡Que seas muy ___ !', sEn: 'May you be very happy!', hint: 'emotion' },
+  { es: 'triste', en: 'sad', pos: 'adjective', level: 'A1', sEs: 'La película tiene un final ___ .', sEn: 'The movie has a sad ending.', hint: 'emotion' },
+  { es: 'cansado', en: 'tired', pos: 'adjective', level: 'A1', sEs: 'Estoy ___ después del viaje.', sEn: 'I am tired after the trip.', hint: 'state' },
+  { es: 'contento', en: 'glad / pleased', pos: 'adjective', level: 'A1', sEs: 'Estamos muy ___ de verte.', sEn: 'We are very glad to see you.', hint: 'emotion' },
+  { es: 'fuerte', en: 'strong', pos: 'adjective', level: 'A2', sEs: 'Tiene un carácter muy ___ .', sEn: 'He has a very strong character.', hint: 'trait' },
+  { es: 'importante', en: 'important', pos: 'adjective', level: 'A1', sEs: 'Es una decisión muy ___ .', sEn: 'It is a very important decision.', hint: 'priority' },
+  { es: 'necesario', en: 'necessary', pos: 'adjective', level: 'A2', sEs: 'Dormir bien es ___ .', sEn: 'Sleeping well is necessary.', hint: 'need' },
+  { es: 'posible', en: 'possible', pos: 'adjective', level: 'A1', sEs: 'Todo es ___ con esfuerzo.', sEn: 'Everything is possible with effort.', hint: 'possibility' },
+  { es: 'imposible', en: 'impossible', pos: 'adjective', level: 'A2', sEs: 'Nada es ___ si perseveras.', sEn: 'Nothing is impossible if you persevere.', hint: 'possibility' },
+  { es: 'diferente', en: 'different', pos: 'adjective', level: 'A1', sEs: 'Cada cultura es ___ .', sEn: 'Each culture is different.', hint: 'contrast' },
+  { es: 'mismo', en: 'same', pos: 'adjective', level: 'A1', sEs: 'Pensamos lo ___ .', sEn: 'We think the same thing.', hint: 'identity' },
+  { es: 'primero', en: 'first', pos: 'adjective', level: 'A1', sEs: 'Es mi ___ viaje a España.', sEn: 'It is my first trip to Spain.', hint: 'order' },
+  { es: 'último', en: 'last', pos: 'adjective', level: 'A1', sEs: 'Este es el ___ tren de la noche.', sEn: 'This is the last train of the night.', hint: 'order' }
+];
+
 export function generateExpandedVocabulary(): SpanishWord[] {
-  const dataset = [...INITIAL_SPANISH_WORDS];
+  const dataset = [...CORE_SPANISH_WORDS];
 
-  const additionalWords: Array<{
-    es: string; en: string; pos: PartOfSpeech; level: CEFRLevel;
-    sEs: string; sEn: string; hint: string;
-  }> = [
-    { es: 'hoy', en: 'today', pos: 'noun', level: 'A1', sEs: '___ hace un día hermoso.', sEn: 'Today is a beautiful day.', hint: 'present day' },
-    { es: 'mañana', en: 'tomorrow', pos: 'noun', level: 'A1', sEs: 'Nos vemos ___ en clase.', sEn: 'See you tomorrow in class.', hint: 'next day' },
-    { es: 'ayer', en: 'yesterday', pos: 'noun', level: 'A1', sEs: '___ fue un día largo.', sEn: 'Yesterday was a long day.', hint: 'past day' },
-    { es: 'aquí', en: 'here', pos: 'adverb', level: 'A1', sEs: 'Ven ___ , por favor.', sEn: 'Come here, please.', hint: 'place adverb' },
-    { es: 'allí', en: 'there', pos: 'adverb', level: 'A1', sEs: 'El hotel está ___ enfrente.', sEn: 'The hotel is right over there.', hint: 'place adverb' },
-    { es: 'siempre', en: 'always', pos: 'adverb', level: 'A1', sEs: 'Él ___ dice la verdad.', sEn: 'He always tells the truth.', hint: 'frequency adverb' },
-    { es: 'nunca', en: 'never', pos: 'adverb', level: 'A1', sEs: 'Yo ___ llego tarde.', sEn: 'I never arrive late.', hint: 'negative adverb' },
-    { es: 'también', en: 'also / too', pos: 'adverb', level: 'A1', sEs: 'A mí ___ me gusta el café.', sEn: 'I also like coffee.', hint: 'addition adverb' },
-    { es: 'tampoco', en: 'neither / not either', pos: 'adverb', level: 'A1', sEs: 'Yo ___ sé la respuesta.', sEn: 'I don’t know the answer either.', hint: 'negative addition' },
-    { es: 'casa', en: 'house / home', pos: 'noun', level: 'A1', sEs: 'Voy a mi ___ a descansar.', sEn: 'I am going home to rest.', hint: 'feminine noun (la casa)' },
-    { es: 'amigo', en: 'friend', pos: 'noun', level: 'A1', sEs: 'Carlos es mi mejor ___ .', sEn: 'Carlos is my best friend.', hint: 'masculine noun' },
-    { es: 'tiempo', en: 'time / weather', pos: 'noun', level: 'A1', sEs: 'No tengo mucho ___ hoy.', sEn: 'I don’t have much time today.', hint: 'masculine noun' },
-    { es: 'trabajo', en: 'job / work', pos: 'noun', level: 'A1', sEs: 'Ella tiene un buen ___ .', sEn: 'She has a good job.', hint: 'masculine noun' },
-    { es: 'agua', en: 'water', pos: 'noun', level: 'A1', sEs: 'Un vaso de ___ , por favor.', sEn: 'A glass of water, please.', hint: 'noun (el agua)' },
-    { es: 'comida', en: 'food / meal', pos: 'noun', level: 'A1', sEs: 'La ___ está muy rica.', sEn: 'The food is very tasty.', hint: 'feminine noun' },
-    { es: 'grande', en: 'big / large', pos: 'adjective', level: 'A1', sEs: 'Tienen una casa muy ___ .', sEn: 'They have a very big house.', hint: 'size adjective' },
-    { es: 'pequeño', en: 'small / little', pos: 'adjective', level: 'A1', sEs: 'El perro es muy ___ .', sEn: 'The dog is very small.', hint: 'size adjective' },
-    { es: 'nuevo', en: 'new', pos: 'adjective', level: 'A1', sEs: 'Me compré un teléfono ___ .', sEn: 'I bought myself a new phone.', hint: 'masculine adjective' },
-    { es: 'bueno', en: 'good', pos: 'adjective', level: 'A1', sEs: 'Es un ___ momento para hablar.', sEn: 'It is a good time to talk.', hint: 'quality adjective' },
-    { es: 'malo', en: 'bad', pos: 'adjective', level: 'A1', sEs: 'No es un ___ plan.', sEn: 'It is not a bad plan.', hint: 'quality adjective' }
-  ];
-
-  additionalWords.forEach((item, index) => {
+  EXPANSION_VOCABULARY.forEach((item, index) => {
     dataset.push({
-      id: `w-add-${index + 71}`,
+      id: `w-exp-${index + 71}`,
       spanish: item.es,
       english: item.en,
       partOfSpeech: item.pos,
