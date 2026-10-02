@@ -75,6 +75,8 @@ export interface AppSettings {
   accentToolbar: boolean; // Show Spanish accent helper buttons (á, é, í, ó, ú, ñ)
   preferredVoice?: string; // Selected TTS voice URI / name
   speechRate?: number; // Pitch/Rate (default 0.9)
+  supabaseUrl?: string;
+  supabaseKey?: string;
 }
 
 export interface CombinedWordData extends SpanishWord {

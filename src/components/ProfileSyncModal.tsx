@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { syncService, type RemoteProfileSummary, type SyncStatus } from '../services/sync';
 import { supabaseSyncService } from '../services/supabaseSync';
-import { X, User, RefreshCw, Smartphone, Check, Plus, Wifi, Cloud, Globe, Key, Database, Copy, ShieldCheck } from 'lucide-react';
+import { X, User, RefreshCw, Smartphone, Check, Plus, Wifi, Cloud, Globe, Key, Database, Copy, ShieldCheck, Share2 } from 'lucide-react';
 
 interface ProfileSyncModalProps {
   onClose: () => void;
@@ -99,6 +99,16 @@ create policy "Public access" on lingvist_sync for all using (true) with check (
     navigator.clipboard.writeText(sqlCode);
     setCopiedSql(true);
     setTimeout(() => setCopiedSql(false), 2000);
+  };
+
+  const [copiedMagicLink, setCopiedMagicLink] = useState(false);
+
+  const copyMagicLink = () => {
+    const link = supabaseSyncService.getMagicSetupLink(activeProfile.id);
+    if (!link) return;
+    navigator.clipboard.writeText(link);
+    setCopiedMagicLink(true);
+    setTimeout(() => setCopiedMagicLink(false), 3000);
   };
 
   return (
@@ -289,6 +299,38 @@ create policy "Public access" on lingvist_sync for all using (true) with check (
                 }}
               >
                 {testResult.message}
+              </div>
+            )}
+
+            {isSupabaseConfigured && (
+              <div
+                style={{
+                  background: 'var(--bg-card)',
+                  borderRadius: '10px',
+                  padding: '12px 14px',
+                  border: '1.5px solid var(--accent-teal)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
+                  marginTop: '4px'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                  <span style={{ fontSize: '13px', fontWeight: 800, color: 'var(--accent-teal-dark)' }}>
+                    📲 1-Click Phone Login (No typing required!)
+                  </span>
+                  <button
+                    className="primary-btn"
+                    style={{ padding: '6px 12px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                    onClick={copyMagicLink}
+                  >
+                    {copiedMagicLink ? <Check size={14} /> : <Share2 size={14} />}
+                    {copiedMagicLink ? 'Link Copied to Clipboard!' : 'Copy Login Link for Phone'}
+                  </button>
+                </div>
+                <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
+                  Send this link to your phone (iMessage, WhatsApp, Notes, Email) and tap it once. Your phone will auto-configure and save your cloud login permanently!
+                </p>
               </div>
             )}
 

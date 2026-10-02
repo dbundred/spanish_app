@@ -13,12 +13,56 @@ class SupabaseSyncService {
 
   constructor() {
     if (typeof window !== 'undefined') {
-      const url = localStorage.getItem('lingvist_supabase_url');
-      const key = localStorage.getItem('lingvist_supabase_key');
-      if (url && key) {
-        this.initClient(url, key);
+      // 1. Check build-time / Vercel environment variables
+      const envUrl = (import.meta as any).env?.VITE_SUPABASE_URL;
+      const envKey = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY;
+
+      // 2. Check 1-click magic setup link (#sync?url=...&key=...)
+      let hashUrl: string | null = null;
+      let hashKey: string | null = null;
+      if (window.location.hash && window.location.hash.includes('sync?')) {
+        try {
+          const hashStr = window.location.hash.substring(window.location.hash.indexOf('sync?') + 5);
+          const params = new URLSearchParams(hashStr);
+          hashUrl = params.get('url');
+          hashKey = params.get('key');
+          const profileParam = params.get('profile');
+          if (profileParam) {
+            localStorage.setItem('lingvist_active_profile_id', profileParam);
+          }
+          // Clean hash from URL bar so credentials don't linger in history
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        } catch (e) {
+          console.warn('Error reading sync magic link:', e);
+        }
+      }
+
+      // 3. Check localStorage
+      const localUrl = localStorage.getItem('lingvist_supabase_url');
+      const localKey = localStorage.getItem('lingvist_supabase_key');
+
+      const finalUrl = hashUrl || localUrl || envUrl;
+      const finalKey = hashKey || localKey || envKey;
+
+      if (finalUrl && finalKey) {
+        this.initClient(finalUrl, finalKey);
+      } else {
+        // 4. Asynchronously restore from IndexedDB (survives iOS Safari storage cleaning)
+        this.restoreFromIndexedDB();
       }
     }
+  }
+
+  public async restoreFromIndexedDB(): Promise<boolean> {
+    try {
+      const settings = await getSettings();
+      if (settings?.supabaseUrl && settings?.supabaseKey && !this.client) {
+        return this.initClient(settings.supabaseUrl, settings.supabaseKey);
+      }
+    } catch {
+      // ignore
+    }
+    return false;
   }
 
   public isConfigured(): boolean {
@@ -27,6 +71,18 @@ class SupabaseSyncService {
 
   public getConfig(): SupabaseConfig | null {
     return this.config;
+  }
+
+  public getMagicSetupLink(profileId: string = 'default'): string {
+    const cfg = this.getConfig();
+    if (!cfg) return '';
+    const base = typeof window !== 'undefined' ? window.location.origin : 'https://spanish-app-two-steel.vercel.app';
+    const params = new URLSearchParams({
+      url: cfg.url,
+      key: cfg.key,
+      profile: profileId
+    });
+    return `${base}#sync?${params.toString()}`;
   }
 
   public initClient(url: string, key: string): boolean {
@@ -40,6 +96,8 @@ class SupabaseSyncService {
       if (typeof window !== 'undefined') {
         localStorage.setItem('lingvist_supabase_url', cleanUrl);
         localStorage.setItem('lingvist_supabase_key', cleanKey);
+        // Persist into IndexedDB as well
+        updateSettings({ supabaseUrl: cleanUrl, supabaseKey: cleanKey }).catch(() => {});
       }
       return true;
     } catch (err) {
@@ -56,8 +114,10 @@ class SupabaseSyncService {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('lingvist_supabase_url');
       localStorage.removeItem('lingvist_supabase_key');
+      updateSettings({ supabaseUrl: '', supabaseKey: '' }).catch(() => {});
     }
   }
+
 
   /**
    * Test connection to Supabase table
