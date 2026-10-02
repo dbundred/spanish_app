@@ -8,7 +8,7 @@ import type { SpanishWord, PartOfSpeech, CEFRLevel } from '../types';
  *   connectors, prepositions, adverbs, and core conversational nouns/adjectives.
  *   NO past or future tenses appear in the beginner range.
  * - INTERMEDIATE & ADVANCED (ranks 150+): Past tenses (pretérito, imperfecto), future tenses,
- *   and conditional forms. These are unlocked only after a user crosses the vocab threshold (50 words).
+ *   and conditional forms. These are unlocked only after a user crosses the vocab threshold (200 words).
  * 
  * Each word includes:
  * - rootVerb: Base lemma (e.g. 'ser', 'estar', 'tener') to allow anti-clustering shuffling.
@@ -1029,7 +1029,7 @@ export const CORE_SPANISH_WORDS: SpanishWord[] = [
 ];
 
 // INTERMEDIATE & COMPLEX TENSE DATASET (Ranks 200+)
-// Unlocked ONLY after beginner crosses the vocabulary threshold (50 words)
+// Unlocked ONLY after beginner crosses the vocabulary threshold (200 words)
 export const COMPLEX_TENSE_WORDS: SpanishWord[] = [
   // --- PAST PRETERITE (El Pretérito Perfecto Simple) ---
   {
@@ -1461,7 +1461,7 @@ export function generateExpandedVocabulary(): SpanishWord[] {
   });
 
   // Add complex tense cards (past, imperfect, future) starting at rank 200+
-  // These cards are protected by the SRS vocab threshold (50 words)
+  // These cards are protected by the SRS vocab threshold (200 words)
   dataset.push(...COMPLEX_TENSE_WORDS);
 
   return dataset;

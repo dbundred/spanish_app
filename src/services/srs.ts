@@ -86,9 +86,9 @@ export async function recordCardAttempt(
 
 /**
  * Vocabulary threshold required before complex tenses (past, imperfect, future) are introduced.
- * Beginners practice strictly present tense and infinitives.
+ * Beginners practice strictly present tense and infinitives until mastering at least 200 words.
  */
-export const VOCAB_THRESHOLD_FOR_COMPLEX_TENSES = 50;
+export const VOCAB_THRESHOLD_FOR_COMPLEX_TENSES = 200;
 
 /**
  * Smart anti-clustering interleaver & shuffler:
