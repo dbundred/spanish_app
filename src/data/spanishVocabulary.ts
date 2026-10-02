@@ -1,5 +1,20 @@
 import type { SpanishWord, PartOfSpeech, CEFRLevel } from '../types';
 
+/**
+ * Lingvist Spanish Vocabulary Deck
+ * 
+ * Pedagogical Structure:
+ * - BEGINNER (ranks 1-120): Strictly PRESENT TENSE conjugations, infinitives, pronouns,
+ *   connectors, prepositions, adverbs, and core conversational nouns/adjectives.
+ *   NO past or future tenses appear in the beginner range.
+ * - INTERMEDIATE & ADVANCED (ranks 150+): Past tenses (pretérito, imperfecto), future tenses,
+ *   and conditional forms. These are unlocked only after a user crosses the vocab threshold (50 words).
+ * 
+ * Each word includes:
+ * - rootVerb: Base lemma (e.g. 'ser', 'estar', 'tener') to allow anti-clustering shuffling.
+ * - tense: 'present' | 'past' | 'future' | 'imperfect' | 'infinitive' | 'none'.
+ */
+
 export const CORE_SPANISH_WORDS: SpanishWord[] = [
   // 1-7: Fundamental Personal Pronouns
   {
@@ -12,7 +27,8 @@ export const CORE_SPANISH_WORDS: SpanishWord[] = [
     sentenceEn: 'I am a Spanish student.',
     sentenceEnLiteral: 'I am student of spanish.',
     hint: '1st person singular pronoun',
-    frequencyRank: 1
+    frequencyRank: 1,
+    tense: 'none'
   },
   {
     id: 'w-2',
@@ -24,7 +40,8 @@ export const CORE_SPANISH_WORDS: SpanishWord[] = [
     sentenceEn: 'Are you from here?',
     sentenceEnLiteral: 'You are of here?',
     hint: '2nd person singular informal',
-    frequencyRank: 2
+    frequencyRank: 2,
+    tense: 'none'
   },
   {
     id: 'w-3',
@@ -36,7 +53,8 @@ export const CORE_SPANISH_WORDS: SpanishWord[] = [
     sentenceEn: 'He speaks English very well.',
     sentenceEnLiteral: 'He speaks english very well.',
     hint: '3rd person masculine pronoun',
-    frequencyRank: 3
+    frequencyRank: 3,
+    tense: 'none'
   },
   {
     id: 'w-4',
@@ -48,7 +66,8 @@ export const CORE_SPANISH_WORDS: SpanishWord[] = [
     sentenceEn: 'She is my best friend.',
     sentenceEnLiteral: 'She is my best friend.',
     hint: '3rd person feminine pronoun',
-    frequencyRank: 4
+    frequencyRank: 4,
+    tense: 'none'
   },
   {
     id: 'w-5',
@@ -60,7 +79,8 @@ export const CORE_SPANISH_WORDS: SpanishWord[] = [
     sentenceEn: 'We live in Madrid.',
     sentenceEnLiteral: 'We live in Madrid.',
     hint: '1st person plural pronoun',
-    frequencyRank: 5
+    frequencyRank: 5,
+    tense: 'none'
   },
   {
     id: 'w-6',
@@ -72,7 +92,8 @@ export const CORE_SPANISH_WORDS: SpanishWord[] = [
     sentenceEn: 'They are in the house.',
     sentenceEnLiteral: 'They are in the house.',
     hint: '3rd person plural pronoun',
-    frequencyRank: 6
+    frequencyRank: 6,
+    tense: 'none'
   },
   {
     id: 'w-7',
@@ -84,915 +105,1349 @@ export const CORE_SPANISH_WORDS: SpanishWord[] = [
     sentenceEn: 'How are you today?',
     sentenceEnLiteral: 'How is you today?',
     hint: 'formal 2nd person singular',
-    frequencyRank: 7
+    frequencyRank: 7,
+    tense: 'none'
   },
 
-  // 8-12: Core Verb - SER (to be - permanent/identity) - Conjugated
+  // 8-15: Everyday Greetings, Answers & Courtesies
   {
     id: 'w-8',
-    spanish: 'soy',
-    english: 'I am (ser)',
-    partOfSpeech: 'verb',
+    spanish: 'hola',
+    english: 'hello / hi',
+    partOfSpeech: 'expression',
     cefr: 'A1',
-    sentenceEs: 'Yo ___ de España.',
-    sentenceEn: 'I am from Spain.',
-    sentenceEnLiteral: 'I am from Spain.',
-    hint: 'verb: ser (presente: yo)',
-    frequencyRank: 8
+    sentenceEs: '¡___! ¿Cómo estás?',
+    sentenceEn: 'Hello! How are you?',
+    hint: 'greeting',
+    frequencyRank: 8,
+    tense: 'none'
   },
   {
     id: 'w-9',
-    spanish: 'es',
-    english: 'is / he is / she is (ser)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Este libro ___ muy interesante.',
-    sentenceEn: 'This book is very interesting.',
-    sentenceEnLiteral: 'This book is very interesting.',
-    hint: 'verb: ser (presente: él/ella)',
-    frequencyRank: 9
-  },
-  {
-    id: 'w-10',
-    spanish: 'eres',
-    english: 'you are (ser)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: '¿De dónde ___ tú?',
-    sentenceEn: 'Where are you from?',
-    sentenceEnLiteral: 'Of where are you?',
-    hint: 'verb: ser (presente: tú)',
-    frequencyRank: 10
-  },
-  {
-    id: 'w-11',
-    spanish: 'somos',
-    english: 'we are (ser)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Nosotros ___ amigos desde hace años.',
-    sentenceEn: 'We are friends for years.',
-    sentenceEnLiteral: 'We are friends from does years.',
-    hint: 'verb: ser (presente: nosotros)',
-    frequencyRank: 11
-  },
-  {
-    id: 'w-12',
-    spanish: 'son',
-    english: 'they are (ser)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Ellos ___ profesores universitarios.',
-    sentenceEn: 'They are university professors.',
-    sentenceEnLiteral: 'They are professors university.',
-    hint: 'verb: ser (presente: ellos)',
-    frequencyRank: 12
-  },
-
-  // 13-15: Core Verb - ESTAR (to be - state/location) - Conjugated
-  {
-    id: 'w-13',
-    spanish: 'estoy',
-    english: 'I am (estar)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Hoy ___ muy contento con los resultados.',
-    sentenceEn: 'Today I am very happy with the results.',
-    sentenceEnLiteral: 'Today I am very happy with the results.',
-    hint: 'verb: estar (presente: yo - mood)',
-    frequencyRank: 13
-  },
-  {
-    id: 'w-14',
-    spanish: 'está',
-    english: 'is / is located (estar)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'El café ___ cerca de aquí.',
-    sentenceEn: 'The café is near here.',
-    sentenceEnLiteral: 'The café is near of here.',
-    hint: 'verb: estar (presente: él/ella - location)',
-    frequencyRank: 14
-  },
-  {
-    id: 'w-15',
-    spanish: 'están',
-    english: 'they are / are located (estar)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: '¿Dónde ___ mis llaves?',
-    sentenceEn: 'Where are my keys?',
-    sentenceEnLiteral: 'Where are my keys?',
-    hint: 'verb: estar (presente: ellos)',
-    frequencyRank: 15
-  },
-
-  // 16-19: Core Verb - TENER (to have) - Conjugated
-  {
-    id: 'w-16',
-    spanish: 'tengo',
-    english: 'I have (tener)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Yo ___ dos hermanos mayores.',
-    sentenceEn: 'I have two older brothers.',
-    sentenceEnLiteral: 'I have two brothers older.',
-    hint: 'verb: tener (presente: yo)',
-    frequencyRank: 16
-  },
-  {
-    id: 'w-17',
-    spanish: 'tienes',
-    english: 'you have (tener)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: '¿___ tiempo para tomar un café?',
-    sentenceEn: 'Do you have time to have a coffee?',
-    sentenceEnLiteral: 'Have you time for to take a coffee?',
-    hint: 'verb: tener (presente: tú)',
-    frequencyRank: 17
-  },
-  {
-    id: 'w-18',
-    spanish: 'tiene',
-    english: 'has / he has / she has (tener)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Ella ___ un coche nuevo.',
-    sentenceEn: 'She has a new car.',
-    sentenceEnLiteral: 'She has a car new.',
-    hint: 'verb: tener (presente: él/ella)',
-    frequencyRank: 18
-  },
-  {
-    id: 'w-19',
-    spanish: 'tenemos',
-    english: 'we have (tener)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Nosotros ___ una reserva a las ocho.',
-    sentenceEn: 'We have a reservation at eight.',
-    sentenceEnLiteral: 'We have a reservation at the eight.',
-    hint: 'verb: tener (presente: nosotros)',
-    frequencyRank: 19
-  },
-
-  // 20-21: HABER (there is/was)
-  {
-    id: 'w-20',
-    spanish: 'hay',
-    english: 'there is / there are (haber)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'En la mesa ___ una carta para ti.',
-    sentenceEn: 'On the table there is a letter for you.',
-    sentenceEnLiteral: 'In the table there is a letter for you.',
-    hint: 'verb: haber (impersonal presente)',
-    frequencyRank: 20
-  },
-  {
-    id: 'w-21',
-    spanish: 'había',
-    english: 'there was / there were (haber)',
-    partOfSpeech: 'verb',
-    cefr: 'A2',
-    sentenceEs: 'Ayer ___ mucha gente en el parque.',
-    sentenceEn: 'Yesterday there were many people in the park.',
-    sentenceEnLiteral: 'Yesterday there was much people in the park.',
-    hint: 'verb: haber (imperfecto)',
-    frequencyRank: 21
-  },
-
-  // 22-26: IR (to go) - Conjugated (Present & Preterite)
-  {
-    id: 'w-22',
-    spanish: 'voy',
-    english: 'I go / I am going (ir)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Yo ___ a la oficina ahora.',
-    sentenceEn: 'I am going to the office now.',
-    sentenceEnLiteral: 'I go to the office now.',
-    hint: 'verb: ir (presente: yo)',
-    frequencyRank: 22
-  },
-  {
-    id: 'w-23',
-    spanish: 'va',
-    english: 'goes / is going (ir)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'El autobús ___ directo al centro.',
-    sentenceEn: 'The bus goes directly to the center.',
-    sentenceEnLiteral: 'The bus goes direct to the center.',
-    hint: 'verb: ir (presente: él/ella)',
-    frequencyRank: 23
-  },
-  {
-    id: 'w-24',
-    spanish: 'vamos',
-    english: 'we go / let’s go (ir)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Nosotros ___ al cine esta tarde.',
-    sentenceEn: 'We are going to the cinema this afternoon.',
-    sentenceEnLiteral: 'We go to the cinema this afternoon.',
-    hint: 'verb: ir (presente: nosotros)',
-    frequencyRank: 24
-  },
-  {
-    id: 'w-25',
-    spanish: 'fui',
-    english: 'I went / I was (ir/ser)',
-    partOfSpeech: 'verb',
-    cefr: 'A2',
-    sentenceEs: 'El sábado ___ a visitar a mis abuelos.',
-    sentenceEn: 'On Saturday I went to visit my grandparents.',
-    sentenceEnLiteral: 'The saturday I went to to visit to my grandparents.',
-    hint: 'verb: ir (pretérito: yo)',
-    frequencyRank: 25
-  },
-  {
-    id: 'w-26',
-    spanish: 'fue',
-    english: 'went / was (ir/ser)',
-    partOfSpeech: 'verb',
-    cefr: 'A2',
-    sentenceEs: 'La reunión de ayer ___ muy productiva.',
-    sentenceEn: 'Yesterday’s meeting was very productive.',
-    sentenceEnLiteral: 'The meeting of yesterday was very productive.',
-    hint: 'verb: ser (pretérito: él/ella)',
-    frequencyRank: 26
-  },
-
-  // 27-29: QUERER (to want / would like) - Conjugated
-  {
-    id: 'w-27',
-    spanish: 'quiero',
-    english: 'I want (querer)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Yo ___ aprender español este año.',
-    sentenceEn: 'I want to learn Spanish this year.',
-    sentenceEnLiteral: 'I want to learn spanish this year.',
-    hint: 'verb: querer (presente: yo)',
-    frequencyRank: 27
-  },
-  {
-    id: 'w-28',
-    spanish: 'quiere',
-    english: 'wants / he wants / she wants (querer)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: '¿Quién ___ un poco de pastel?',
-    sentenceEn: 'Who wants a little bit of cake?',
-    sentenceEnLiteral: 'Who wants a little of cake?',
-    hint: 'verb: querer (presente: él/ella)',
-    frequencyRank: 28
-  },
-  {
-    id: 'w-29',
-    spanish: 'quisiera',
-    english: 'I would like (querer polite)',
-    partOfSpeech: 'verb',
-    cefr: 'A2',
-    sentenceEs: '___ pedir la cuenta, por favor.',
-    sentenceEn: 'I would like to ask for the bill, please.',
-    sentenceEnLiteral: 'I would like to ask-for the bill, by favor.',
-    hint: 'verb: querer (polite request)',
-    frequencyRank: 29
-  },
-
-  // 30-32: PODER (can / to be able) - Conjugated
-  {
-    id: 'w-30',
-    spanish: 'puedo',
-    english: 'I can (poder)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: '¿___ entrar un momento?',
-    sentenceEn: 'Can I come in for a moment?',
-    sentenceEnLiteral: 'Can I to enter a moment?',
-    hint: 'verb: poder (presente: yo)',
-    frequencyRank: 30
-  },
-  {
-    id: 'w-31',
-    spanish: 'puede',
-    english: 'can / you can (formal) (poder)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Usted ___ pasar ahora mismo.',
-    sentenceEn: 'You can come in right now.',
-    sentenceEnLiteral: 'You can to pass now same.',
-    hint: 'verb: poder (presente: él/ella/usted)',
-    frequencyRank: 31
-  },
-  {
-    id: 'w-32',
-    spanish: 'podemos',
-    english: 'we can (poder)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Juntos ___ resolver este problema.',
-    sentenceEn: 'Together we can solve this problem.',
-    sentenceEnLiteral: 'Together we can to solve this problem.',
-    hint: 'verb: poder (presente: nosotros)',
-    frequencyRank: 32
-  },
-
-  // 33-35: HACER (to do / to make) - Conjugated
-  {
-    id: 'w-33',
-    spanish: 'hago',
-    english: 'I do / I make (hacer)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Siempre ___ la cama por la mañana.',
-    sentenceEn: 'I always make the bed in the morning.',
-    sentenceEnLiteral: 'Always I make the bed by the morning.',
-    hint: 'verb: hacer (presente: yo)',
-    frequencyRank: 33
-  },
-  {
-    id: 'w-34',
-    spanish: 'hace',
-    english: 'does / makes / it is (weather) (hacer)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Hoy ___ muy buen tiempo.',
-    sentenceEn: 'Today the weather is very good.',
-    sentenceEnLiteral: 'Today it makes very good weather.',
-    hint: 'verb: hacer (presente: él/ella/clima)',
-    frequencyRank: 34
-  },
-  {
-    id: 'w-35',
-    spanish: 'hizo',
-    english: 'did / made (hacer)',
-    partOfSpeech: 'verb',
-    cefr: 'A2',
-    sentenceEs: 'Él ___ un trabajo excelente.',
-    sentenceEn: 'He did an excellent job.',
-    sentenceEnLiteral: 'He made a job excellent.',
-    hint: 'verb: hacer (pretérito: él/ella)',
-    frequencyRank: 35
-  },
-
-  // 36-38: DECIR (to say / tell) - Conjugated
-  {
-    id: 'w-36',
-    spanish: 'digo',
-    english: 'I say / I tell (decir)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Siempre te ___ la verdad.',
-    sentenceEn: 'I always tell you the truth.',
-    sentenceEnLiteral: 'Always to you I say the truth.',
-    hint: 'verb: decir (presente: yo)',
-    frequencyRank: 36
-  },
-  {
-    id: 'w-37',
-    spanish: 'dice',
-    english: 'says / tells (decir)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Mi amigo ___ que no vendrá hoy.',
-    sentenceEn: 'My friend says he will not come today.',
-    sentenceEnLiteral: 'My friend says that not will-come today.',
-    hint: 'verb: decir (presente: él/ella)',
-    frequencyRank: 37
-  },
-  {
-    id: 'w-38',
-    spanish: 'dijo',
-    english: 'said / told (decir)',
-    partOfSpeech: 'verb',
-    cefr: 'A2',
-    sentenceEs: 'Ella me ___ una noticia sorprendente.',
-    sentenceEn: 'She told me surprising news.',
-    sentenceEnLiteral: 'She to-me said a news surprising.',
-    hint: 'verb: decir (pretérito: él/ella)',
-    frequencyRank: 38
-  },
-
-  // 39-40: SABER (to know) - Conjugated
-  {
-    id: 'w-39',
-    spanish: 'sé',
-    english: 'I know (saber)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Yo no ___ cómo se llama esa calle.',
-    sentenceEn: 'I do not know what that street is called.',
-    sentenceEnLiteral: 'I not know how itself calls that street.',
-    hint: 'verb: saber (presente: yo)',
-    frequencyRank: 39
-  },
-  {
-    id: 'w-40',
-    spanish: 'sabe',
-    english: 'knows (saber)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: '¿Alguien ___ la respuesta a esta pregunta?',
-    sentenceEn: 'Does anyone know the answer to this question?',
-    sentenceEnLiteral: 'Anyone knows the answer to this question?',
-    hint: 'verb: saber (presente: él/ella)',
-    frequencyRank: 40
-  },
-
-  // 41-43: VER (to see) - Conjugated
-  {
-    id: 'w-41',
-    spanish: 'veo',
-    english: 'I see (ver)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Desde mi ventana ___ el mar.',
-    sentenceEn: 'From my window I see the sea.',
-    sentenceEnLiteral: 'From my window I see the sea.',
-    hint: 'verb: ver (presente: yo)',
-    frequencyRank: 41
-  },
-  {
-    id: 'w-42',
-    spanish: 've',
-    english: 'sees (ver)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Él no ___ bien sin sus gafas.',
-    sentenceEn: 'He does not see well without his glasses.',
-    sentenceEnLiteral: 'He not sees well without his glasses.',
-    hint: 'verb: ver (presente: él/ella)',
-    frequencyRank: 42
-  },
-  {
-    id: 'w-43',
-    spanish: 'vimos',
-    english: 'we saw (ver)',
-    partOfSpeech: 'verb',
-    cefr: 'A2',
-    sentenceEs: 'Ayer ___ una película fantástica.',
-    sentenceEn: 'Yesterday we saw a fantastic movie.',
-    sentenceEnLiteral: 'Yesterday we saw a movie fantastic.',
-    hint: 'verb: ver (pretérito: nosotros)',
-    frequencyRank: 43
-  },
-
-  // 44-46: DAR (to give) - Conjugated
-  {
-    id: 'w-44',
-    spanish: 'doy',
-    english: 'I give (dar)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Te ___ las gracias por todo.',
-    sentenceEn: 'I give you thanks for everything.',
-    sentenceEnLiteral: 'To-you I give the thanks by all.',
-    hint: 'verb: dar (presente: yo)',
-    frequencyRank: 44
-  },
-  {
-    id: 'w-45',
-    spanish: 'da',
-    english: 'gives (dar)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Ese árbol ___ mucha sombra en verano.',
-    sentenceEn: 'That tree gives a lot of shade in summer.',
-    sentenceEnLiteral: 'That tree gives much shade in summer.',
-    hint: 'verb: dar (presente: él/ella)',
-    frequencyRank: 45
-  },
-  {
-    id: 'w-46',
-    spanish: 'dio',
-    english: 'gave (dar)',
-    partOfSpeech: 'verb',
-    cefr: 'A2',
-    sentenceEs: 'El profesor nos ___ dos semanas más.',
-    sentenceEn: 'The teacher gave us two more weeks.',
-    sentenceEnLiteral: 'The teacher to-us gave two weeks more.',
-    hint: 'verb: dar (pretérito: él/ella)',
-    frequencyRank: 46
-  },
-
-  // 47-49: PONER (to put) - Conjugated
-  {
-    id: 'w-47',
-    spanish: 'pongo',
-    english: 'I put / I place (poner)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Siempre ___ la mesa antes de comer.',
-    sentenceEn: 'I always set the table before eating.',
-    sentenceEnLiteral: 'Always I put the table before of to eat.',
-    hint: 'verb: poner (presente: yo)',
-    frequencyRank: 47
-  },
-  {
-    id: 'w-48',
-    spanish: 'pone',
-    english: 'puts / places (poner)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Ella se ___ la chaqueta porque hace frío.',
-    sentenceEn: 'She puts on her jacket because it is cold.',
-    sentenceEnLiteral: 'She herself puts the jacket because it makes cold.',
-    hint: 'verb: poner (presente: él/ella)',
-    frequencyRank: 48
-  },
-  {
-    id: 'w-49',
-    spanish: 'puse',
-    english: 'I put / I placed (poner)',
-    partOfSpeech: 'verb',
-    cefr: 'A2',
-    sentenceEs: '___ las llaves en el cajón.',
-    sentenceEn: 'I put the keys in the drawer.',
-    sentenceEnLiteral: 'I put the keys in the drawer.',
-    hint: 'verb: poner (pretérito: yo)',
-    frequencyRank: 49
-  },
-
-  // 50-52: HABLAR (to speak) - Conjugated
-  {
-    id: 'w-50',
-    spanish: 'hablo',
-    english: 'I speak (hablar)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Yo ___ un poco de español.',
-    sentenceEn: 'I speak a little Spanish.',
-    sentenceEnLiteral: 'I speak a little of spanish.',
-    hint: 'verb: hablar (presente: yo)',
-    frequencyRank: 50
-  },
-  {
-    id: 'w-51',
-    spanish: 'habla',
-    english: 'speaks (hablar)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Él ___ tres idiomas con fluidez.',
-    sentenceEn: 'He speaks three languages fluently.',
-    sentenceEnLiteral: 'He speaks three languages with fluency.',
-    hint: 'verb: hablar (presente: él/ella)',
-    frequencyRank: 51
-  },
-  {
-    id: 'w-52',
-    spanish: 'hablamos',
-    english: 'we speak (hablar)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Nosotros ___ de fútbol a menudo.',
-    sentenceEn: 'We speak about football often.',
-    sentenceEnLiteral: 'We speak of soccer to often.',
-    hint: 'verb: hablar (presente: nosotros)',
-    frequencyRank: 52
-  },
-
-  // 53-55: COMER (to eat) - Conjugated
-  {
-    id: 'w-53',
-    spanish: 'como',
-    english: 'I eat (comer)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Por las mañanas ___ fruta fresca.',
-    sentenceEn: 'In the mornings I eat fresh fruit.',
-    sentenceEnLiteral: 'By the mornings I eat fruit fresh.',
-    hint: 'verb: comer (presente: yo)',
-    frequencyRank: 53
-  },
-  {
-    id: 'w-54',
-    spanish: 'come',
-    english: 'eats (comer)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Mi perro ___ dos veces al día.',
-    sentenceEn: 'My dog eats twice a day.',
-    sentenceEnLiteral: 'My dog eats two times to the day.',
-    hint: 'verb: comer (presente: él/ella)',
-    frequencyRank: 54
-  },
-  {
-    id: 'w-55',
-    spanish: 'comimos',
-    english: 'we ate (comer)',
-    partOfSpeech: 'verb',
-    cefr: 'A2',
-    sentenceEs: 'El domingo ___ una paella deliciosa.',
-    sentenceEn: 'On Sunday we ate a delicious paella.',
-    sentenceEnLiteral: 'The sunday we ate a paella delicious.',
-    hint: 'verb: comer (pretérito: nosotros)',
-    frequencyRank: 55
-  },
-
-  // 56-58: VIVIR (to live) - Conjugated
-  {
-    id: 'w-56',
-    spanish: 'vivo',
-    english: 'I live (vivir)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Yo ___ en un apartamento en el centro.',
-    sentenceEn: 'I live in an apartment in the center.',
-    sentenceEnLiteral: 'I live in an apartment in the center.',
-    hint: 'verb: vivir (presente: yo)',
-    frequencyRank: 56
-  },
-  {
-    id: 'w-57',
-    spanish: 'vive',
-    english: 'lives (vivir)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: 'Su familia ___ cerca de la playa.',
-    sentenceEn: 'His family lives near the beach.',
-    sentenceEnLiteral: 'His family lives near of the beach.',
-    hint: 'verb: vivir (presente: él/ella)',
-    frequencyRank: 57
-  },
-  {
-    id: 'w-58',
-    spanish: 'viven',
-    english: 'they live (vivir)',
-    partOfSpeech: 'verb',
-    cefr: 'A1',
-    sentenceEs: '¿Dónde ___ tus padres?',
-    sentenceEn: 'Where do your parents live?',
-    sentenceEnLiteral: 'Where live your parents?',
-    hint: 'verb: vivir (presente: ellos)',
-    frequencyRank: 58
-  },
-
-  // 59-62: Essential Question Words
-  {
-    id: 'w-59',
-    spanish: 'qué',
-    english: 'what',
-    partOfSpeech: 'expression',
-    cefr: 'A1',
-    sentenceEs: '¿___ quieres hacer este fin de semana?',
-    sentenceEn: 'What do you want to do this weekend?',
-    sentenceEnLiteral: 'What want you to to do this weekend?',
-    hint: 'question word',
-    frequencyRank: 59
-  },
-  {
-    id: 'w-60',
-    spanish: 'cómo',
-    english: 'how',
-    partOfSpeech: 'expression',
-    cefr: 'A1',
-    sentenceEs: '¿___ te llamas?',
-    sentenceEn: 'What is your name? (How do you call yourself?)',
-    sentenceEnLiteral: 'How yourself you call?',
-    hint: 'question word',
-    frequencyRank: 60
-  },
-  {
-    id: 'w-61',
-    spanish: 'dónde',
-    english: 'where',
-    partOfSpeech: 'expression',
-    cefr: 'A1',
-    sentenceEs: '¿___ está el baño, por favor?',
-    sentenceEn: 'Where is the bathroom, please?',
-    sentenceEnLiteral: 'Where is the bathroom, by favor?',
-    hint: 'question word for place',
-    frequencyRank: 61
-  },
-  {
-    id: 'w-62',
-    spanish: 'cuándo',
-    english: 'when',
-    partOfSpeech: 'expression',
-    cefr: 'A1',
-    sentenceEs: '¿___ llega tu vuelo?',
-    sentenceEn: 'When does your flight arrive?',
-    sentenceEnLiteral: 'When arrives your flight?',
-    hint: 'question word for time',
-    frequencyRank: 62
-  },
-
-  // 63-70: High-Frequency Everyday Essentials
-  {
-    id: 'w-63',
     spanish: 'gracias',
     english: 'thank you / thanks',
     partOfSpeech: 'expression',
     cefr: 'A1',
     sentenceEs: 'Muchas ___ por toda tu ayuda.',
     sentenceEn: 'Many thanks for all your help.',
-    sentenceEnLiteral: 'Many thanks by all your help.',
     hint: 'polite expression',
-    frequencyRank: 63
+    frequencyRank: 9,
+    tense: 'none'
   },
   {
-    id: 'w-64',
+    id: 'w-10',
     spanish: 'por favor',
     english: 'please',
     partOfSpeech: 'expression',
     cefr: 'A1',
     sentenceEs: 'La cuenta, ___ .',
     sentenceEn: 'The check, please.',
-    sentenceEnLiteral: 'The bill, please.',
     hint: 'polite request expression',
-    frequencyRank: 64
+    frequencyRank: 10,
+    tense: 'none'
   },
   {
-    id: 'w-65',
+    id: 'w-11',
     spanish: 'sí',
     english: 'yes',
     partOfSpeech: 'expression',
     cefr: 'A1',
-    sentenceEs: '___ , estoy totalmente de acuerdo.',
-    sentenceEn: 'Yes, I totally agree.',
-    sentenceEnLiteral: 'Yes, I am totally of agreement.',
+    sentenceEs: '___ , estoy de acuerdo.',
+    sentenceEn: 'Yes, I agree.',
     hint: 'affirmation',
-    frequencyRank: 65
+    frequencyRank: 11,
+    tense: 'none'
   },
   {
-    id: 'w-66',
+    id: 'w-12',
     spanish: 'no',
     english: 'no / not',
     partOfSpeech: 'expression',
     cefr: 'A1',
     sentenceEs: '___ tengo tiempo hoy.',
     sentenceEn: 'I do not have time today.',
-    sentenceEnLiteral: 'Not I have time today.',
     hint: 'negation particle',
-    frequencyRank: 66
+    frequencyRank: 12,
+    tense: 'none'
   },
   {
-    id: 'w-67',
+    id: 'w-13',
+    spanish: 'bien',
+    english: 'well / good',
+    partOfSpeech: 'adverb',
+    cefr: 'A1',
+    sentenceEs: 'Todo está muy ___ por aquí.',
+    sentenceEn: 'Everything is very well around here.',
+    hint: 'manner adverb',
+    frequencyRank: 13,
+    tense: 'none'
+  },
+  {
+    id: 'w-14',
+    spanish: 'adiós',
+    english: 'goodbye / bye',
+    partOfSpeech: 'expression',
+    cefr: 'A1',
+    sentenceEs: '¡___, hasta mañana!',
+    sentenceEn: 'Goodbye, see you tomorrow!',
+    hint: 'farewell',
+    frequencyRank: 14,
+    tense: 'none'
+  },
+
+  // 15-22: Essential Question Words & Connectors
+  {
+    id: 'w-15',
+    spanish: 'qué',
+    english: 'what',
+    partOfSpeech: 'expression',
+    cefr: 'A1',
+    sentenceEs: '¿___ quieres hacer hoy?',
+    sentenceEn: 'What do you want to do today?',
+    hint: 'question word',
+    frequencyRank: 15,
+    tense: 'none'
+  },
+  {
+    id: 'w-16',
+    spanish: 'dónde',
+    english: 'where',
+    partOfSpeech: 'expression',
+    cefr: 'A1',
+    sentenceEs: '¿___ está el baño, por favor?',
+    sentenceEn: 'Where is the bathroom, please?',
+    hint: 'question word for place',
+    frequencyRank: 16,
+    tense: 'none'
+  },
+  {
+    id: 'w-17',
+    spanish: 'cómo',
+    english: 'how',
+    partOfSpeech: 'expression',
+    cefr: 'A1',
+    sentenceEs: '¿___ te llamas?',
+    sentenceEn: 'What is your name? (How do you call yourself?)',
+    hint: 'question word for manner',
+    frequencyRank: 17,
+    tense: 'none'
+  },
+  {
+    id: 'w-18',
+    spanish: 'cuándo',
+    english: 'when',
+    partOfSpeech: 'expression',
+    cefr: 'A1',
+    sentenceEs: '¿___ empieza la película?',
+    sentenceEn: 'When does the movie start?',
+    hint: 'question word for time',
+    frequencyRank: 18,
+    tense: 'none'
+  },
+  {
+    id: 'w-19',
+    spanish: 'pero',
+    english: 'but',
+    partOfSpeech: 'conjunction',
+    cefr: 'A1',
+    sentenceEs: 'Quiero salir, ___ llueve mucho.',
+    sentenceEn: 'I want to go out, but it is raining a lot.',
+    hint: 'contrast conjunction',
+    frequencyRank: 19,
+    tense: 'none'
+  },
+  {
+    id: 'w-20',
+    spanish: 'porque',
+    english: 'because',
+    partOfSpeech: 'conjunction',
+    cefr: 'A1',
+    sentenceEs: 'Estudio español ___ me gusta viajar.',
+    sentenceEn: 'I study Spanish because I like to travel.',
+    hint: 'reason conjunction',
+    frequencyRank: 20,
+    tense: 'none'
+  },
+
+  // 21-80: Core Present-Tense Verbs (Interleaved with Nouns, Adjectives, Prepositions)
+  // Notice: All verbs are PRESENT TENSE ONLY! No past or future tenses.
+  {
+    id: 'w-21',
+    spanish: 'es',
+    english: 'is / he is / she is (ser)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Este libro ___ muy interesante.',
+    sentenceEn: 'This book is very interesting.',
+    hint: 'verb: ser (presente: él/ella)',
+    frequencyRank: 21,
+    tense: 'present',
+    rootVerb: 'ser'
+  },
+  {
+    id: 'w-22',
+    spanish: 'casa',
+    english: 'house / home',
+    partOfSpeech: 'noun',
+    cefr: 'A1',
+    sentenceEs: 'Voy a mi ___ a descansar.',
+    sentenceEn: 'I am going home to rest.',
+    hint: 'feminine noun',
+    frequencyRank: 22,
+    tense: 'none'
+  },
+  {
+    id: 'w-23',
+    spanish: 'está',
+    english: 'is / is located (estar)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'El café ___ cerca de aquí.',
+    sentenceEn: 'The café is near here.',
+    hint: 'verb: estar (presente: él/ella - location)',
+    frequencyRank: 23,
+    tense: 'present',
+    rootVerb: 'estar'
+  },
+  {
+    id: 'w-24',
     spanish: 'muy',
     english: 'very',
     partOfSpeech: 'adverb',
     cefr: 'A1',
     sentenceEs: 'Esta comida está ___ rica.',
     sentenceEn: 'This food is very tasty.',
-    sentenceEnLiteral: 'This food is very rich.',
     hint: 'intensifier adverb',
-    frequencyRank: 67
+    frequencyRank: 24,
+    tense: 'none'
   },
   {
-    id: 'w-68',
-    spanish: 'mucho',
-    english: 'a lot / much',
+    id: 'w-25',
+    spanish: 'tengo',
+    english: 'I have (tener)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Yo ___ dos hermanos mayores.',
+    sentenceEn: 'I have two older brothers.',
+    hint: 'verb: tener (presente: yo)',
+    frequencyRank: 25,
+    tense: 'present',
+    rootVerb: 'tener'
+  },
+  {
+    id: 'w-26',
+    spanish: 'amigo',
+    english: 'friend',
+    partOfSpeech: 'noun',
+    cefr: 'A1',
+    sentenceEs: 'Carlos es mi mejor ___ .',
+    sentenceEn: 'Carlos is my best friend.',
+    hint: 'masculine noun',
+    frequencyRank: 26,
+    tense: 'none'
+  },
+  {
+    id: 'w-27',
+    spanish: 'hay',
+    english: 'there is / there are (haber)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'En la mesa ___ una carta para ti.',
+    sentenceEn: 'On the table there is a letter for you.',
+    hint: 'verb: haber (impersonal presente)',
+    frequencyRank: 27,
+    tense: 'present',
+    rootVerb: 'haber'
+  },
+  {
+    id: 'w-28',
+    spanish: 'tiempo',
+    english: 'time / weather',
+    partOfSpeech: 'noun',
+    cefr: 'A1',
+    sentenceEs: 'No tengo mucho ___ hoy.',
+    sentenceEn: 'I don’t have much time today.',
+    hint: 'masculine noun',
+    frequencyRank: 28,
+    tense: 'none'
+  },
+  {
+    id: 'w-29',
+    spanish: 'quiero',
+    english: 'I want (querer)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Yo ___ aprender español este año.',
+    sentenceEn: 'I want to learn Spanish this year.',
+    hint: 'verb: querer (presente: yo)',
+    frequencyRank: 29,
+    tense: 'present',
+    rootVerb: 'querer'
+  },
+  {
+    id: 'w-30',
+    spanish: 'grande',
+    english: 'big / large',
+    partOfSpeech: 'adjective',
+    cefr: 'A1',
+    sentenceEs: 'Tienen una casa muy ___ .',
+    sentenceEn: 'They have a very big house.',
+    hint: 'size adjective',
+    frequencyRank: 30,
+    tense: 'none'
+  },
+  {
+    id: 'w-31',
+    spanish: 'voy',
+    english: 'I go / I am going (ir)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Yo ___ a la tienda ahora.',
+    sentenceEn: 'I am going to the shop now.',
+    hint: 'verb: ir (presente: yo)',
+    frequencyRank: 31,
+    tense: 'present',
+    rootVerb: 'ir'
+  },
+  {
+    id: 'w-32',
+    spanish: 'agua',
+    english: 'water',
+    partOfSpeech: 'noun',
+    cefr: 'A1',
+    sentenceEs: 'Un vaso de ___ fría, por favor.',
+    sentenceEn: 'A glass of cold water, please.',
+    hint: 'noun (el agua)',
+    frequencyRank: 32,
+    tense: 'none'
+  },
+  {
+    id: 'w-33',
+    spanish: 'puedo',
+    english: 'I can / can I (poder)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: '¿___ hacer una pregunta rápida?',
+    sentenceEn: 'Can I ask a quick question?',
+    hint: 'verb: poder (presente: yo)',
+    frequencyRank: 33,
+    tense: 'present',
+    rootVerb: 'poder'
+  },
+  {
+    id: 'w-34',
+    spanish: 'hoy',
+    english: 'today',
+    partOfSpeech: 'noun',
+    cefr: 'A1',
+    sentenceEs: '___ hace un día maravilloso.',
+    sentenceEn: 'Today is a wonderful day.',
+    hint: 'present day',
+    frequencyRank: 34,
+    tense: 'none'
+  },
+  {
+    id: 'w-35',
+    spanish: 'soy',
+    english: 'I am (ser)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Yo ___ de España.',
+    sentenceEn: 'I am from Spain.',
+    hint: 'verb: ser (presente: yo)',
+    frequencyRank: 35,
+    tense: 'present',
+    rootVerb: 'ser'
+  },
+  {
+    id: 'w-36',
+    spanish: 'bueno',
+    english: 'good',
+    partOfSpeech: 'adjective',
+    cefr: 'A1',
+    sentenceEs: 'Es un ___ momento para hablar.',
+    sentenceEn: 'It is a good time to talk.',
+    hint: 'quality adjective',
+    frequencyRank: 36,
+    tense: 'none'
+  },
+  {
+    id: 'w-37',
+    spanish: 'estoy',
+    english: 'I am (estar)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Hoy ___ muy contento con los resultados.',
+    sentenceEn: 'Today I am very happy with the results.',
+    hint: 'verb: estar (presente: yo - mood)',
+    frequencyRank: 37,
+    tense: 'present',
+    rootVerb: 'estar'
+  },
+  {
+    id: 'w-38',
+    spanish: 'día',
+    english: 'day',
+    partOfSpeech: 'noun',
+    cefr: 'A1',
+    sentenceEs: '¡Que tengas un buen ___ !',
+    sentenceEn: 'Have a good day!',
+    hint: 'masculine noun (el día)',
+    frequencyRank: 38,
+    tense: 'none'
+  },
+  {
+    id: 'w-39',
+    spanish: 'tiene',
+    english: 'has / he has / she has (tener)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Ella ___ un coche nuevo.',
+    sentenceEn: 'She has a new car.',
+    hint: 'verb: tener (presente: él/ella)',
+    frequencyRank: 39,
+    tense: 'present',
+    rootVerb: 'tener'
+  },
+  {
+    id: 'w-40',
+    spanish: 'siempre',
+    english: 'always',
     partOfSpeech: 'adverb',
     cefr: 'A1',
-    sentenceEs: 'Estudió ___ para aprobar el examen.',
-    sentenceEn: 'He studied a lot to pass the exam.',
-    sentenceEnLiteral: 'He studied much for to pass the exam.',
-    hint: 'quantity adverb',
-    frequencyRank: 68
+    sentenceEs: 'Ella ___ llega a tiempo.',
+    sentenceEn: 'She always arrives on time.',
+    hint: 'frequency adverb',
+    frequencyRank: 40,
+    tense: 'none'
   },
   {
-    id: 'w-69',
-    spanish: 'bien',
-    english: 'well / fine',
+    id: 'w-41',
+    spanish: 'hace',
+    english: 'makes / does / weather (hacer)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Hoy ___ mucho calor afuera.',
+    sentenceEn: 'Today it is very hot outside.',
+    hint: 'verb: hacer (presente: clima/él)',
+    frequencyRank: 41,
+    tense: 'present',
+    rootVerb: 'hacer'
+  },
+  {
+    id: 'w-42',
+    spanish: 'comida',
+    english: 'food / meal',
+    partOfSpeech: 'noun',
+    cefr: 'A1',
+    sentenceEs: 'La ___ está deliciosa.',
+    sentenceEn: 'The food is delicious.',
+    hint: 'feminine noun',
+    frequencyRank: 42,
+    tense: 'none'
+  },
+  {
+    id: 'w-43',
+    spanish: 'va',
+    english: 'goes / is going (ir)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'El autobús ___ directo al centro.',
+    sentenceEn: 'The bus goes directly to the center.',
+    hint: 'verb: ir (presente: él/ella)',
+    frequencyRank: 43,
+    tense: 'present',
+    rootVerb: 'ir'
+  },
+  {
+    id: 'w-44',
+    spanish: 'aquí',
+    english: 'here',
     partOfSpeech: 'adverb',
     cefr: 'A1',
-    sentenceEs: 'Todo está muy ___ por aquí.',
-    sentenceEn: 'Everything is very well around here.',
-    sentenceEnLiteral: 'All is very well around here.',
-    hint: 'manner adverb',
-    frequencyRank: 69
+    sentenceEs: 'Por favor, siéntate ___ .',
+    sentenceEn: 'Please, sit here.',
+    hint: 'location adverb',
+    frequencyRank: 44,
+    tense: 'none'
   },
   {
-    id: 'w-70',
+    id: 'w-45',
+    spanish: 'sé',
+    english: 'I know (saber)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Yo no ___ la dirección exacta.',
+    sentenceEn: 'I do not know the exact address.',
+    hint: 'verb: saber (presente: yo)',
+    frequencyRank: 45,
+    tense: 'present',
+    rootVerb: 'saber'
+  },
+  {
+    id: 'w-46',
+    spanish: 'trabajo',
+    english: 'job / work',
+    partOfSpeech: 'noun',
+    cefr: 'A1',
+    sentenceEs: 'Tengo mucho ___ esta semana.',
+    sentenceEn: 'I have a lot of work this week.',
+    hint: 'masculine noun',
+    frequencyRank: 46,
+    tense: 'none'
+  },
+  {
+    id: 'w-47',
+    spanish: 'habla',
+    english: 'speaks / he speaks / she speaks (hablar)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Él ___ tres idiomas.',
+    sentenceEn: 'He speaks three languages.',
+    hint: 'verb: hablar (presente: él/ella)',
+    frequencyRank: 47,
+    tense: 'present',
+    rootVerb: 'hablar'
+  },
+  {
+    id: 'w-48',
+    spanish: 'nuevo',
+    english: 'new',
+    partOfSpeech: 'adjective',
+    cefr: 'A1',
+    sentenceEs: 'Tengo un número de teléfono ___ .',
+    sentenceEn: 'I have a new phone number.',
+    hint: 'adjective',
+    frequencyRank: 48,
+    tense: 'none'
+  },
+  {
+    id: 'w-49',
+    spanish: 'puede',
+    english: 'can / you can (formal) (poder)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Usted ___ pasar ahora.',
+    sentenceEn: 'You can come in now.',
+    hint: 'verb: poder (presente: él/ella/usted)',
+    frequencyRank: 49,
+    tense: 'present',
+    rootVerb: 'poder'
+  },
+  {
+    id: 'w-50',
+    spanish: 'noche',
+    english: 'night',
+    partOfSpeech: 'noun',
+    cefr: 'A1',
+    sentenceEs: 'Buenas ___ y que descanses.',
+    sentenceEn: 'Good night and rest well.',
+    hint: 'feminine noun',
+    frequencyRank: 50,
+    tense: 'none'
+  },
+  {
+    id: 'w-51',
+    spanish: 'dice',
+    english: 'says / he says / she says (decir)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'El periódico ___ que va a llover.',
+    sentenceEn: 'The newspaper says it will rain.',
+    hint: 'verb: decir (presente: él/ella)',
+    frequencyRank: 51,
+    tense: 'present',
+    rootVerb: 'decir'
+  },
+  {
+    id: 'w-52',
     spanish: 'ahora',
     english: 'now',
     partOfSpeech: 'adverb',
     cefr: 'A1',
     sentenceEs: 'Tenemos que salir ___ mismo.',
     sentenceEn: 'We have to leave right now.',
-    sentenceEnLiteral: 'We have to exit now same.',
     hint: 'time adverb',
-    frequencyRank: 70
+    frequencyRank: 52,
+    tense: 'none'
+  },
+  {
+    id: 'w-53',
+    spanish: 'veo',
+    english: 'I see (ver)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Desde mi ventana ___ el mar.',
+    sentenceEn: 'From my window I see the sea.',
+    hint: 'verb: ver (presente: yo)',
+    frequencyRank: 53,
+    tense: 'present',
+    rootVerb: 'ver'
+  },
+  {
+    id: 'w-54',
+    spanish: 'pequeño',
+    english: 'small / little',
+    partOfSpeech: 'adjective',
+    cefr: 'A1',
+    sentenceEs: 'El apartamento es ___ pero cómodo.',
+    sentenceEn: 'The apartment is small but comfortable.',
+    hint: 'size adjective',
+    frequencyRank: 54,
+    tense: 'none'
+  },
+  {
+    id: 'w-55',
+    spanish: 'somos',
+    english: 'we are (ser)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Nosotros ___ amigos desde hace años.',
+    sentenceEn: 'We are friends for years.',
+    hint: 'verb: ser (presente: nosotros)',
+    frequencyRank: 55,
+    tense: 'present',
+    rootVerb: 'ser'
+  },
+  {
+    id: 'w-56',
+    spanish: 'año',
+    english: 'year',
+    partOfSpeech: 'noun',
+    cefr: 'A1',
+    sentenceEs: 'Este ___ quiero viajar a España.',
+    sentenceEn: 'This year I want to travel to Spain.',
+    hint: 'masculine noun',
+    frequencyRank: 56,
+    tense: 'none'
+  },
+  {
+    id: 'w-57',
+    spanish: 'están',
+    english: 'they are / are located (estar)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: '¿Dónde ___ mis llaves?',
+    sentenceEn: 'Where are my keys?',
+    hint: 'verb: estar (presente: ellos)',
+    frequencyRank: 57,
+    tense: 'present',
+    rootVerb: 'estar'
+  },
+  {
+    id: 'w-58',
+    spanish: 'dinero',
+    english: 'money',
+    partOfSpeech: 'noun',
+    cefr: 'A1',
+    sentenceEs: '¿Cuánto ___ cuesta este billete?',
+    sentenceEn: 'How much money does this ticket cost?',
+    hint: 'masculine noun',
+    frequencyRank: 58,
+    tense: 'none'
+  },
+  {
+    id: 'w-59',
+    spanish: 'tenemos',
+    english: 'we have (tener)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Nosotros ___ una reserva a las ocho.',
+    sentenceEn: 'We have a reservation at eight.',
+    hint: 'verb: tener (presente: nosotros)',
+    frequencyRank: 59,
+    tense: 'present',
+    rootVerb: 'tener'
+  },
+  {
+    id: 'w-60',
+    spanish: 'ciudad',
+    english: 'city',
+    partOfSpeech: 'noun',
+    cefr: 'A1',
+    sentenceEs: 'Madrid es una ___ maravillosa.',
+    sentenceEn: 'Madrid is a wonderful city.',
+    hint: 'feminine noun',
+    frequencyRank: 60,
+    tense: 'none'
+  },
+  {
+    id: 'w-61',
+    spanish: 'vamos',
+    english: 'we go / let’s go (ir)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Nosotros ___ al cine juntos.',
+    sentenceEn: 'We are going to the cinema together.',
+    hint: 'verb: ir (presente: nosotros)',
+    frequencyRank: 61,
+    tense: 'present',
+    rootVerb: 'ir'
+  },
+  {
+    id: 'w-62',
+    spanish: 'fácil',
+    english: 'easy',
+    partOfSpeech: 'adjective',
+    cefr: 'A1',
+    sentenceEs: 'Aprender vocabulario es ___ con práctica.',
+    sentenceEn: 'Learning vocabulary is easy with practice.',
+    hint: 'difficulty adjective',
+    frequencyRank: 62,
+    tense: 'none'
+  },
+  {
+    id: 'w-63',
+    spanish: 'quiere',
+    english: 'wants / he wants / she wants (querer)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Ella ___ un café con leche.',
+    sentenceEn: 'She wants a coffee with milk.',
+    hint: 'verb: querer (presente: él/ella)',
+    frequencyRank: 63,
+    tense: 'present',
+    rootVerb: 'querer'
+  },
+  {
+    id: 'w-64',
+    spanish: 'familia',
+    english: 'family',
+    partOfSpeech: 'noun',
+    cefr: 'A1',
+    sentenceEs: 'Toda mi ___ vive en Valencia.',
+    sentenceEn: 'All my family lives in Valencia.',
+    hint: 'feminine noun',
+    frequencyRank: 64,
+    tense: 'none'
+  },
+  {
+    id: 'w-65',
+    spanish: 'come',
+    english: 'eats / he eats / she eats (comer)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Mi perro ___ dos veces al día.',
+    sentenceEn: 'My dog eats twice a day.',
+    hint: 'verb: comer (presente: él/ella)',
+    frequencyRank: 65,
+    tense: 'present',
+    rootVerb: 'comer'
+  },
+  {
+    id: 'w-66',
+    spanish: 'persona',
+    english: 'person',
+    partOfSpeech: 'noun',
+    cefr: 'A1',
+    sentenceEs: 'Ella es una ___ muy amable.',
+    sentenceEn: 'She is a very kind person.',
+    hint: 'feminine noun',
+    frequencyRank: 66,
+    tense: 'none'
+  },
+  {
+    id: 'w-67',
+    spanish: 'vive',
+    english: 'lives / he lives / she lives (vivir)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Su abuela ___ cerca de aquí.',
+    sentenceEn: 'His grandmother lives near here.',
+    hint: 'verb: vivir (presente: él/ella)',
+    frequencyRank: 67,
+    tense: 'present',
+    rootVerb: 'vivir'
+  },
+  {
+    id: 'w-68',
+    spanish: 'importante',
+    english: 'important',
+    partOfSpeech: 'adjective',
+    cefr: 'A1',
+    sentenceEs: 'La salud es lo más ___ .',
+    sentenceEn: 'Health is the most important thing.',
+    hint: 'priority adjective',
+    frequencyRank: 68,
+    tense: 'none'
+  },
+  {
+    id: 'w-69',
+    spanish: 'hago',
+    english: 'I do / I make (hacer)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Yo ___ ejercicio por la mañana.',
+    sentenceEn: 'I do exercise in the morning.',
+    hint: 'verb: hacer (presente: yo)',
+    frequencyRank: 69,
+    tense: 'present',
+    rootVerb: 'hacer'
+  },
+  {
+    id: 'w-70',
+    spanish: 'nunca',
+    english: 'never',
+    partOfSpeech: 'adverb',
+    cefr: 'A1',
+    sentenceEs: 'Yo ___ tomo café por la noche.',
+    sentenceEn: 'I never drink coffee at night.',
+    hint: 'frequency adverb',
+    frequencyRank: 70,
+    tense: 'none'
+  },
+  {
+    id: 'w-71',
+    spanish: 'eres',
+    english: 'you are (ser)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: '¿Tú ___ el hermano de Laura?',
+    sentenceEn: 'Are you Laura’s brother?',
+    hint: 'verb: ser (presente: tú)',
+    frequencyRank: 71,
+    tense: 'present',
+    rootVerb: 'ser'
+  },
+  {
+    id: 'w-72',
+    spanish: 'tienes',
+    english: 'you have (tener)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: '¿___ tiempo para hablar un momento?',
+    sentenceEn: 'Do you have time to talk for a moment?',
+    hint: 'verb: tener (presente: tú)',
+    frequencyRank: 72,
+    tense: 'present',
+    rootVerb: 'tener'
+  },
+  {
+    id: 'w-73',
+    spanish: 'gusta',
+    english: 'pleases / like (me gusta)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Me ___ mucho aprender idiomas.',
+    sentenceEn: 'I like learning languages a lot.',
+    hint: 'verb: gustar (presente: 3ra persona)',
+    frequencyRank: 73,
+    tense: 'present',
+    rootVerb: 'gustar'
+  },
+  {
+    id: 'w-74',
+    spanish: 'entiendo',
+    english: 'I understand (entender)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Ahora sí ___ la lección.',
+    sentenceEn: 'Now I do understand the lesson.',
+    hint: 'verb: entender (presente: yo)',
+    frequencyRank: 74,
+    tense: 'present',
+    rootVerb: 'entender'
+  },
+  {
+    id: 'w-75',
+    spanish: 'necesito',
+    english: 'I need (necesitar)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: '___ comprar pan para la cena.',
+    sentenceEn: 'I need to buy bread for dinner.',
+    hint: 'verb: necesitar (presente: yo)',
+    frequencyRank: 75,
+    tense: 'present',
+    rootVerb: 'necesitar'
+  },
+  {
+    id: 'w-76',
+    spanish: 'hablo',
+    english: 'I speak (hablar)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Yo ___ un poco de español.',
+    sentenceEn: 'I speak a little Spanish.',
+    hint: 'verb: hablar (presente: yo)',
+    frequencyRank: 76,
+    tense: 'present',
+    rootVerb: 'hablar'
+  },
+  {
+    id: 'w-77',
+    spanish: 'como',
+    english: 'I eat (comer)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Por las mañanas ___ fruta fresca.',
+    sentenceEn: 'In the mornings I eat fresh fruit.',
+    hint: 'verb: comer (presente: yo)',
+    frequencyRank: 77,
+    tense: 'present',
+    rootVerb: 'comer'
+  },
+  {
+    id: 'w-78',
+    spanish: 'vivo',
+    english: 'I live (vivir)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Yo ___ en un apartamento céntrico.',
+    sentenceEn: 'I live in a downtown apartment.',
+    hint: 'verb: vivir (presente: yo)',
+    frequencyRank: 78,
+    tense: 'present',
+    rootVerb: 'vivir'
+  },
+  {
+    id: 'w-79',
+    spanish: 'da',
+    english: 'gives / he gives / she gives (dar)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'El profesor ___ buenas explicaciones.',
+    sentenceEn: 'The teacher gives good explanations.',
+    hint: 'verb: dar (presente: él/ella)',
+    frequencyRank: 79,
+    tense: 'present',
+    rootVerb: 'dar'
+  },
+  {
+    id: 'w-80',
+    spanish: 'pone',
+    english: 'puts / he puts / she puts (poner)',
+    partOfSpeech: 'verb',
+    cefr: 'A1',
+    sentenceEs: 'Ella ___ las llaves en la mesa.',
+    sentenceEn: 'She puts the keys on the table.',
+    hint: 'verb: poner (presente: él/ella)',
+    frequencyRank: 80,
+    tense: 'present',
+    rootVerb: 'poner'
   }
 ];
 
-// Rich expansion dataset: Top Spanish Vocabulary covering A1, A2, B1, B2
+// INTERMEDIATE & COMPLEX TENSE DATASET (Ranks 200+)
+// Unlocked ONLY after beginner crosses the vocabulary threshold (50 words)
+export const COMPLEX_TENSE_WORDS: SpanishWord[] = [
+  // --- PAST PRETERITE (El Pretérito Perfecto Simple) ---
+  {
+    id: 'w-past-1',
+    spanish: 'fue',
+    english: 'was / went (ser/ir)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'La película de ayer ___ increíble.',
+    sentenceEn: 'Yesterday’s movie was incredible.',
+    hint: 'verb: ser/ir (pretérito: él/ella)',
+    frequencyRank: 201,
+    tense: 'past',
+    rootVerb: 'ser'
+  },
+  {
+    id: 'w-past-2',
+    spanish: 'fui',
+    english: 'I was / I went (ser/ir)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'El sábado ___ a visitar a mis abuelos.',
+    sentenceEn: 'On Saturday I went to visit my grandparents.',
+    hint: 'verb: ser/ir (pretérito: yo)',
+    frequencyRank: 202,
+    tense: 'past',
+    rootVerb: 'ir'
+  },
+  {
+    id: 'w-past-3',
+    spanish: 'estuve',
+    english: 'I was (estar)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'Ayer ___ en casa todo el día.',
+    sentenceEn: 'Yesterday I was at home all day.',
+    hint: 'verb: estar (pretérito: yo)',
+    frequencyRank: 203,
+    tense: 'past',
+    rootVerb: 'estar'
+  },
+  {
+    id: 'w-past-4',
+    spanish: 'estuvo',
+    english: 'was / he was / she was (estar)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'La fiesta ___ muy divertida.',
+    sentenceEn: 'The party was very fun.',
+    hint: 'verb: estar (pretérito: él/ella)',
+    frequencyRank: 204,
+    tense: 'past',
+    rootVerb: 'estar'
+  },
+  {
+    id: 'w-past-5',
+    spanish: 'tuve',
+    english: 'I had (tener)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'Ayer ___ que trabajar hasta tarde.',
+    sentenceEn: 'Yesterday I had to work until late.',
+    hint: 'verb: tener (pretérito: yo)',
+    frequencyRank: 205,
+    tense: 'past',
+    rootVerb: 'tener'
+  },
+  {
+    id: 'w-past-6',
+    spanish: 'tuvo',
+    english: 'had / he had / she had (tener)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'Ella ___ una gran idea.',
+    sentenceEn: 'She had a great idea.',
+    hint: 'verb: tener (pretérito: él/ella)',
+    frequencyRank: 206,
+    tense: 'past',
+    rootVerb: 'tener'
+  },
+  {
+    id: 'w-past-7',
+    spanish: 'hizo',
+    english: 'did / made (hacer)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'Él ___ un pastel para el cumpleaños.',
+    sentenceEn: 'He made a cake for the birthday.',
+    hint: 'verb: hacer (pretérito: él/ella)',
+    frequencyRank: 207,
+    tense: 'past',
+    rootVerb: 'hacer'
+  },
+  {
+    id: 'w-past-8',
+    spanish: 'hice',
+    english: 'I did / I made (hacer)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'Ya ___ todos mis deberes.',
+    sentenceEn: 'I already did all my homework.',
+    hint: 'verb: hacer (pretérito: yo)',
+    frequencyRank: 208,
+    tense: 'past',
+    rootVerb: 'hacer'
+  },
+  {
+    id: 'w-past-9',
+    spanish: 'dijo',
+    english: 'said / he said / she said (decir)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'Ella me ___ la verdad.',
+    sentenceEn: 'She told me the truth.',
+    hint: 'verb: decir (pretérito: él/ella)',
+    frequencyRank: 209,
+    tense: 'past',
+    rootVerb: 'decir'
+  },
+  {
+    id: 'w-past-10',
+    spanish: 'dije',
+    english: 'I said / I told (decir)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'Le ___ que llegaría temprano.',
+    sentenceEn: 'I told him that I would arrive early.',
+    hint: 'verb: decir (pretérito: yo)',
+    frequencyRank: 210,
+    tense: 'past',
+    rootVerb: 'decir'
+  },
+  {
+    id: 'w-past-11',
+    spanish: 'pudo',
+    english: 'could / was able to (poder)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'Nadie ___ resolver el misterio.',
+    sentenceEn: 'Nobody could solve the mystery.',
+    hint: 'verb: poder (pretérito: él/ella)',
+    frequencyRank: 211,
+    tense: 'past',
+    rootVerb: 'poder'
+  },
+  {
+    id: 'w-past-12',
+    spanish: 'vi',
+    english: 'I saw (ver)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'Ayer ___ una película fantástica.',
+    sentenceEn: 'Yesterday I saw a fantastic movie.',
+    hint: 'verb: ver (pretérito: yo)',
+    frequencyRank: 212,
+    tense: 'past',
+    rootVerb: 'ver'
+  },
+  {
+    id: 'w-past-13',
+    spanish: 'comí',
+    english: 'I ate (comer)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'El domingo ___ paella en Valencia.',
+    sentenceEn: 'On Sunday I ate paella in Valencia.',
+    hint: 'verb: comer (pretérito: yo)',
+    frequencyRank: 213,
+    tense: 'past',
+    rootVerb: 'comer'
+  },
+  {
+    id: 'w-past-14',
+    spanish: 'hablé',
+    english: 'I spoke (hablar)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'Ayer ___ con mi madre por teléfono.',
+    sentenceEn: 'Yesterday I spoke with my mother on the phone.',
+    hint: 'verb: hablar (pretérito: yo)',
+    frequencyRank: 214,
+    tense: 'past',
+    rootVerb: 'hablar'
+  },
+  {
+    id: 'w-past-15',
+    spanish: 'dio',
+    english: 'gave / he gave / she gave (dar)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'Él me ___ un abrazo muy fuerte.',
+    sentenceEn: 'He gave me a very strong hug.',
+    hint: 'verb: dar (pretérito: él/ella)',
+    frequencyRank: 215,
+    tense: 'past',
+    rootVerb: 'dar'
+  },
+  {
+    id: 'w-past-16',
+    spanish: 'puso',
+    english: 'put / he put / she put (poner)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'Ella ___ las llaves en el bolso.',
+    sentenceEn: 'She put the keys in the purse.',
+    hint: 'verb: poner (pretérito: él/ella)',
+    frequencyRank: 216,
+    tense: 'past',
+    rootVerb: 'poner'
+  },
+
+  // --- PAST IMPERFECT (El Pretérito Imperfecto) ---
+  {
+    id: 'w-past-17',
+    spanish: 'había',
+    english: 'there was / there were (haber)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'En el parque ___ muchos niños jugando.',
+    sentenceEn: 'In the park there were many children playing.',
+    hint: 'verb: haber (imperfecto)',
+    frequencyRank: 220,
+    tense: 'imperfect',
+    rootVerb: 'haber'
+  },
+  {
+    id: 'w-past-18',
+    spanish: 'era',
+    english: 'was / used to be (ser)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'Cuando ___ niño, vivía en el campo.',
+    sentenceEn: 'When I was a child, I used to live in the countryside.',
+    hint: 'verb: ser (imperfecto: yo/él)',
+    frequencyRank: 221,
+    tense: 'imperfect',
+    rootVerb: 'ser'
+  },
+  {
+    id: 'w-past-19',
+    spanish: 'estaba',
+    english: 'was / was being (estar)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'El café ___ cerrado cuando llegué.',
+    sentenceEn: 'The café was closed when I arrived.',
+    hint: 'verb: estar (imperfecto: yo/él)',
+    frequencyRank: 222,
+    tense: 'imperfect',
+    rootVerb: 'estar'
+  },
+  {
+    id: 'w-past-20',
+    spanish: 'tenía',
+    english: 'had / used to have (tener)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'De pequeña ella ___ un gato blanco.',
+    sentenceEn: 'As a child she had a white cat.',
+    hint: 'verb: tener (imperfecto: yo/él)',
+    frequencyRank: 223,
+    tense: 'imperfect',
+    rootVerb: 'tener'
+  },
+  {
+    id: 'w-past-21',
+    spanish: 'iba',
+    english: 'went / used to go (ir)',
+    partOfSpeech: 'verb',
+    cefr: 'A2',
+    sentenceEs: 'Cada verano ___ a la playa con amigos.',
+    sentenceEn: 'Every summer I used to go to the beach with friends.',
+    hint: 'verb: ir (imperfecto: yo/él)',
+    frequencyRank: 224,
+    tense: 'imperfect',
+    rootVerb: 'ir'
+  },
+
+  // --- FUTURE TENSE (El Futuro Simple) ---
+  {
+    id: 'w-fut-1',
+    spanish: 'será',
+    english: 'will be (ser)',
+    partOfSpeech: 'verb',
+    cefr: 'B1',
+    sentenceEs: 'El concierto de mañana ___ genial.',
+    sentenceEn: 'Tomorrow’s concert will be great.',
+    hint: 'verb: ser (futuro: él/ella)',
+    frequencyRank: 250,
+    tense: 'future',
+    rootVerb: 'ser'
+  },
+  {
+    id: 'w-fut-2',
+    spanish: 'estará',
+    english: 'will be (estar)',
+    partOfSpeech: 'verb',
+    cefr: 'B1',
+    sentenceEs: 'El paquete ___ listo a las cinco.',
+    sentenceEn: 'The parcel will be ready at five.',
+    hint: 'verb: estar (futuro: él/ella)',
+    frequencyRank: 251,
+    tense: 'future',
+    rootVerb: 'estar'
+  },
+  {
+    id: 'w-fut-3',
+    spanish: 'tendrá',
+    english: 'will have (tener)',
+    partOfSpeech: 'verb',
+    cefr: 'B1',
+    sentenceEs: 'Pronto ___ más información.',
+    sentenceEn: 'Soon he will have more information.',
+    hint: 'verb: tener (futuro: él/ella)',
+    frequencyRank: 252,
+    tense: 'future',
+    rootVerb: 'tener'
+  },
+  {
+    id: 'w-fut-4',
+    spanish: 'habrá',
+    english: 'there will be (haber)',
+    partOfSpeech: 'verb',
+    cefr: 'B1',
+    sentenceEs: 'Mañana ___ una gran celebración.',
+    sentenceEn: 'Tomorrow there will be a big celebration.',
+    hint: 'verb: haber (futuro)',
+    frequencyRank: 253,
+    tense: 'future',
+    rootVerb: 'haber'
+  },
+  {
+    id: 'w-fut-5',
+    spanish: 'irá',
+    english: 'will go (ir)',
+    partOfSpeech: 'verb',
+    cefr: 'B1',
+    sentenceEs: 'Ella ___ a la universidad en otoño.',
+    sentenceEn: 'She will go to university in autumn.',
+    hint: 'verb: ir (futuro: él/ella)',
+    frequencyRank: 254,
+    tense: 'future',
+    rootVerb: 'ir'
+  },
+  {
+    id: 'w-fut-6',
+    spanish: 'hará',
+    english: 'will make / will do (hacer)',
+    partOfSpeech: 'verb',
+    cefr: 'B1',
+    sentenceEs: 'El fin de semana ___ buen tiempo.',
+    sentenceEn: 'At the weekend it will make good weather.',
+    hint: 'verb: hacer (futuro: clima/él)',
+    frequencyRank: 255,
+    tense: 'future',
+    rootVerb: 'hacer'
+  }
+];
+
+// Rich Expansion Dataset: Nouns, Adjectives, Infinitives (A1/A2)
 const EXPANSION_VOCABULARY: Array<{
   es: string; en: string; pos: PartOfSpeech; level: CEFRLevel;
   sEs: string; sEn: string; hint: string;
 }> = [
-  { es: 'hoy', en: 'today', pos: 'noun', level: 'A1', sEs: '___ hace un día hermoso.', sEn: 'Today is a beautiful day.', hint: 'present day' },
   { es: 'mañana', en: 'tomorrow', pos: 'noun', level: 'A1', sEs: 'Nos vemos ___ en clase.', sEn: 'See you tomorrow in class.', hint: 'next day' },
-  { es: 'ayer', en: 'yesterday', pos: 'noun', level: 'A1', sEs: '___ fue un día largo.', sEn: 'Yesterday was a long day.', hint: 'past day' },
-  { es: 'aquí', en: 'here', pos: 'adverb', level: 'A1', sEs: 'Ven ___ , por favor.', sEn: 'Come here, please.', hint: 'place adverb' },
+  { es: 'ayer', en: 'yesterday', pos: 'noun', level: 'A1', sEs: '___ fue un día productivo.', sEn: 'Yesterday was a productive day.', hint: 'past day' },
   { es: 'allí', en: 'there', pos: 'adverb', level: 'A1', sEs: 'El hotel está ___ enfrente.', sEn: 'The hotel is right over there.', hint: 'place adverb' },
-  { es: 'siempre', en: 'always', pos: 'adverb', level: 'A1', sEs: 'Él ___ dice la verdad.', sEn: 'He always tells the truth.', hint: 'frequency adverb' },
-  { es: 'nunca', en: 'never', pos: 'adverb', level: 'A1', sEs: 'Yo ___ llego tarde.', sEn: 'I never arrive late.', hint: 'negative adverb' },
   { es: 'también', en: 'also / too', pos: 'adverb', level: 'A1', sEs: 'A mí ___ me gusta el café.', sEn: 'I also like coffee.', hint: 'addition adverb' },
   { es: 'tampoco', en: 'neither / not either', pos: 'adverb', level: 'A1', sEs: 'Yo ___ sé la respuesta.', sEn: 'I don’t know the answer either.', hint: 'negative addition' },
-  { es: 'casa', en: 'house / home', pos: 'noun', level: 'A1', sEs: 'Voy a mi ___ a descansar.', sEn: 'I am going home to rest.', hint: 'feminine noun' },
-  { es: 'amigo', en: 'friend', pos: 'noun', level: 'A1', sEs: 'Carlos es mi mejor ___ .', sEn: 'Carlos is my best friend.', hint: 'masculine noun' },
-  { es: 'tiempo', en: 'time / weather', pos: 'noun', level: 'A1', sEs: 'No tengo mucho ___ hoy.', sEn: 'I don’t have much time today.', hint: 'masculine noun' },
-  { es: 'trabajo', en: 'job / work', pos: 'noun', level: 'A1', sEs: 'Ella tiene un buen ___ .', sEn: 'She has a good job.', hint: 'masculine noun' },
-  { es: 'agua', en: 'water', pos: 'noun', level: 'A1', sEs: 'Un vaso de ___ , por favor.', sEn: 'A glass of water, please.', hint: 'noun (el agua)' },
-  { es: 'comida', en: 'food / meal', pos: 'noun', level: 'A1', sEs: 'La ___ está muy rica.', sEn: 'The food is very tasty.', hint: 'feminine noun' },
-  { es: 'grande', en: 'big / large', pos: 'adjective', level: 'A1', sEs: 'Tienen una casa muy ___ .', sEn: 'They have a very big house.', hint: 'size adjective' },
-  { es: 'pequeño', en: 'small / little', pos: 'adjective', level: 'A1', sEs: 'El perro es muy ___ .', sEn: 'The dog is very small.', hint: 'size adjective' },
-  { es: 'nuevo', en: 'new', pos: 'adjective', level: 'A1', sEs: 'Me compré un teléfono ___ .', sEn: 'I bought myself a new phone.', hint: 'masculine adjective' },
-  { es: 'bueno', en: 'good', pos: 'adjective', level: 'A1', sEs: 'Es un ___ momento para hablar.', sEn: 'It is a good time to talk.', hint: 'quality adjective' },
-  { es: 'malo', en: 'bad', pos: 'adjective', level: 'A1', sEs: 'No es un ___ plan.', sEn: 'It is not a bad plan.', hint: 'quality adjective' },
-  { es: 'persona', en: 'person', pos: 'noun', level: 'A1', sEs: 'Ella es una ___ muy amable.', sEn: 'She is a very kind person.', hint: 'feminine noun' },
+  { es: 'mucho', en: 'a lot / much', pos: 'adverb', level: 'A1', sEs: 'Estudió ___ para aprender.', sEn: 'He studied a lot to learn.', hint: 'quantity adverb' },
   { es: 'mundo', en: 'world', pos: 'noun', level: 'A1', sEs: 'Viajó por todo el ___ .', sEn: 'He traveled all over the world.', hint: 'masculine noun' },
   { es: 'vida', en: 'life', pos: 'noun', level: 'A1', sEs: 'Disfruta de la ___ cada día.', sEn: 'Enjoy life every day.', hint: 'feminine noun' },
   { es: 'mano', en: 'hand', pos: 'noun', level: 'A1', sEs: 'Levanta la ___ para preguntar.', sEn: 'Raise your hand to ask.', hint: 'feminine noun' },
-  { es: 'día', en: 'day', pos: 'noun', level: 'A1', sEs: '¡Que tengas un buen ___ !', sEn: 'Have a good day!', hint: 'masculine noun' },
-  { es: 'año', en: 'year', pos: 'noun', level: 'A1', sEs: 'Este ___ va a ser extraordinario.', sEn: 'This year is going to be extraordinary.', hint: 'masculine noun' },
   { es: 'escribir', en: 'to write', pos: 'verb', level: 'A1', sEs: 'Me encanta ___ cartas a mano.', sEn: 'I love to write letters by hand.', hint: 'infinitive verb' },
   { es: 'leer', en: 'to read', pos: 'verb', level: 'A1', sEs: 'Suelo ___ libros por la noche.', sEn: 'I usually read books at night.', hint: 'infinitive verb' },
   { es: 'escuchar', en: 'to listen to', pos: 'verb', level: 'A1', sEs: 'Debes ___ con atención.', sEn: 'You must listen attentively.', hint: 'infinitive verb' },
+  { es: 'hablar', en: 'to speak', pos: 'verb', level: 'A1', sEs: 'Quiero ___ español con fluidez.', sEn: 'I want to speak Spanish fluently.', hint: 'infinitive verb' },
+  { es: 'comer', en: 'to eat', pos: 'verb', level: 'A1', sEs: 'Vamos a ___ juntos hoy.', sEn: 'We are going to eat together today.', hint: 'infinitive verb' },
+  { es: 'vivir', en: 'to live', pos: 'verb', level: 'A1', sEs: 'Es genial ___ en esta ciudad.', sEn: 'It is great to live in this city.', hint: 'infinitive verb' },
   { es: 'camino', en: 'way / path', pos: 'noun', level: 'A2', sEs: 'Este ___ lleva a la montaña.', sEn: 'This path leads to the mountain.', hint: 'masculine noun' },
   { es: 'verdad', en: 'truth', pos: 'noun', level: 'A2', sEs: 'Siempre di la ___ .', sEn: 'Always tell the truth.', hint: 'feminine noun' },
   { es: 'problema', en: 'problem', pos: 'noun', level: 'A1', sEs: 'No hay ningún ___ aquí.', sEn: 'There is no problem here.', hint: 'masculine noun' },
-  { es: 'sistema', en: 'system', pos: 'noun', level: 'A2', sEs: 'El ___ está funcionando bien.', sEn: 'The system is working well.', hint: 'masculine noun' },
   { es: 'pregunta', en: 'question', pos: 'noun', level: 'A1', sEs: 'Tengo una ___ importante.', sEn: 'I have an important question.', hint: 'feminine noun' },
   { es: 'respuesta', en: 'answer / response', pos: 'noun', level: 'A1', sEs: 'Espera la ___ correcta.', sEn: 'Wait for the correct answer.', hint: 'feminine noun' },
   { es: 'país', en: 'country', pos: 'noun', level: 'A1', sEs: 'España es un ___ hermoso.', sEn: 'Spain is a beautiful country.', hint: 'masculine noun' },
-  { es: 'familia', en: 'family', pos: 'noun', level: 'A1', sEs: 'La ___ es lo más valioso.', sEn: 'Family is the most valuable thing.', hint: 'feminine noun' },
-  { es: 'grupo', en: 'group', pos: 'noun', level: 'A1', sEs: 'Un ___ de estudiantes vino hoy.', sEn: 'A group of students came today.', hint: 'masculine noun' },
-  { es: 'ciudad', en: 'city', pos: 'noun', level: 'A2', sEs: 'Barcelona es una ___ cosmopolita.', sEn: 'Barcelona is a cosmopolitan city.', hint: 'feminine noun' },
-  { es: 'viaje', en: 'trip / journey', pos: 'noun', level: 'A2', sEs: '¡Buen ___ a todos!', sEn: 'Have a good trip everyone!', hint: 'masculine noun' },
   { es: 'lugar', en: 'place', pos: 'noun', level: 'A2', sEs: 'Este es un ___ tranquilo.', sEn: 'This is a quiet place.', hint: 'masculine noun' },
   { es: 'seguro', en: 'safe / sure', pos: 'adjective', level: 'A2', sEs: '¿Estás ___ de tu respuesta?', sEn: 'Are you sure about your answer?', hint: 'certainty' },
   { es: 'después', en: 'after / later', pos: 'preposition', level: 'A1', sEs: 'Nos vemos ___ de comer.', sEn: 'See you after eating.', hint: 'time marker' },
   { es: 'antes', en: 'before', pos: 'preposition', level: 'A1', sEs: 'Llega ___ de las ocho.', sEn: 'Arrive before eight.', hint: 'time marker' },
-  { es: 'fácil', en: 'easy', pos: 'adjective', level: 'A1', sEs: 'Este ejercicio es muy ___ .', sEn: 'This exercise is very easy.', hint: 'difficulty' },
   { es: 'difícil', en: 'difficult / hard', pos: 'adjective', level: 'A1', sEs: 'La gramática no es tan ___ .', sEn: 'Grammar is not that hard.', hint: 'difficulty' },
   { es: 'rápido', en: 'fast / quick', pos: 'adjective', level: 'A1', sEs: 'El tren es muy ___ .', sEn: 'The train is very fast.', hint: 'speed' },
   { es: 'lento', en: 'slow', pos: 'adjective', level: 'A1', sEs: 'El tráfico va muy ___ .', sEn: 'Traffic is moving very slowly.', hint: 'speed' },
-  { es: 'temprano', en: 'early', pos: 'adverb', level: 'A2', sEs: 'Me despierto ___ cada día.', sEn: 'I wake up early every day.', hint: 'time' },
   { es: 'tarde', en: 'late / afternoon', pos: 'adverb', level: 'A1', sEs: 'Buenas ___ a todos.', sEn: 'Good afternoon everyone.', hint: 'time' },
-  { es: 'noche', en: 'night', pos: 'noun', level: 'A1', sEs: 'Buenas ___ y que descanses.', sEn: 'Good night and rest well.', hint: 'time' },
-  { es: 'mañana', en: 'morning', pos: 'noun', level: 'A1', sEs: 'Por la ___ tomo café.', sEn: 'In the morning I drink coffee.', hint: 'time' },
   { es: 'semana', en: 'week', pos: 'noun', level: 'A1', sEs: 'Esta ___ tengo exámenes.', sEn: 'This week I have exams.', hint: 'calendar' },
   { es: 'mes', en: 'month', pos: 'noun', level: 'A1', sEs: 'El próximo ___ viajo a México.', sEn: 'Next month I travel to Mexico.', hint: 'calendar' },
   { es: 'hora', en: 'hour / time', pos: 'noun', level: 'A1', sEs: '¿Qué ___ es, por favor?', sEn: 'What time is it, please?', hint: 'clock' },
-  { es: 'minuto', en: 'minute', pos: 'noun', level: 'A1', sEs: 'Espera un ___ aquí.', sEn: 'Wait a minute here.', hint: 'clock' },
-  { es: 'segundo', en: 'second', pos: 'noun', level: 'A1', sEs: 'Solo dame un ___ .', sEn: 'Just give me a second.', hint: 'clock' },
-  { es: 'dinero', en: 'money', pos: 'noun', level: 'A1', sEs: 'No llevo mucho ___ encima.', sEn: 'I don’t carry much money on me.', hint: 'noun' },
-  { es: 'precio', en: 'price', pos: 'noun', level: 'A2', sEs: 'El ___ es muy razonable.', sEn: 'The price is very reasonable.', hint: 'noun' },
   { es: 'tienda', en: 'shop / store', pos: 'noun', level: 'A1', sEs: 'La ___ abre a las diez.', sEn: 'The shop opens at ten.', hint: 'noun' },
-  { es: 'comprar', en: 'to buy', pos: 'verb', level: 'A1', sEs: 'Voy a ___ pan fresco.', sEn: 'I am going to buy fresh bread.', hint: 'verb' },
-  { es: 'pagar', en: 'to pay', pos: 'verb', level: 'A1', sEs: '¿Puedo ___ con tarjeta?', sEn: 'Can I pay by card?', hint: 'verb' },
+  { es: 'comprar', en: 'to buy', pos: 'verb', level: 'A1', sEs: 'Voy a ___ pan fresco.', sEn: 'I am going to buy fresh bread.', hint: 'infinitive verb' },
+  { es: 'pagar', en: 'to pay', pos: 'verb', level: 'A1', sEs: '¿Puedo ___ con tarjeta?', sEn: 'Can I pay by card?', hint: 'infinitive verb' },
   { es: 'abierto', en: 'open', pos: 'adjective', level: 'A1', sEs: 'El museo está ___ hoy.', sEn: 'The museum is open today.', hint: 'state' },
   { es: 'cerrado', en: 'closed', pos: 'adjective', level: 'A1', sEs: 'El banco está ___ los domingos.', sEn: 'The bank is closed on Sundays.', hint: 'state' },
   { es: 'calle', en: 'street', pos: 'noun', level: 'A1', sEs: 'Cruza la ___ con cuidado.', sEn: 'Cross the street carefully.', hint: 'location' },
   { es: 'puerta', en: 'door', pos: 'noun', level: 'A1', sEs: 'Cierra la ___ al salir.', sEn: 'Close the door when leaving.', hint: 'object' },
-  { es: 'ventana', en: 'window', pos: 'noun', level: 'A1', sEs: 'Abre la ___ para que entre aire.', sEn: 'Open the window to let air in.', hint: 'object' },
   { es: 'coche', en: 'car', pos: 'noun', level: 'A1', sEs: 'Dejé el ___ en el garaje.', sEn: 'I left the car in the garage.', hint: 'vehicle' },
-  { es: 'tren', en: 'train', pos: 'noun', level: 'A1', sEs: 'El ___ llega puntual.', sEn: 'The train arrives on time.', hint: 'vehicle' },
-  { es: 'avión', en: 'airplane', pos: 'noun', level: 'A2', sEs: 'El ___ despega pronto.', sEn: 'The plane takes off soon.', hint: 'vehicle' },
-  { es: 'hotel', en: 'hotel', pos: 'noun', level: 'A1', sEs: 'Nos alojamos en un buen ___ .', sEn: 'We stayed at a good hotel.', hint: 'accommodation' },
-  { es: 'habitación', en: 'room', pos: 'noun', level: 'A1', sEs: 'Mi ___ tiene vista al jardín.', sEn: 'My room has a garden view.', hint: 'noun' },
-  { es: 'cama', en: 'bed', pos: 'noun', level: 'A1', sEs: 'La ___ es muy cómoda.', sEn: 'The bed is very comfortable.', hint: 'furniture' },
-  { es: 'mesa', en: 'table', pos: 'noun', level: 'A1', sEs: 'Pon los platos en la ___ .', sEn: 'Put the plates on the table.', hint: 'furniture' },
-  { es: 'silla', en: 'chair', pos: 'noun', level: 'A1', sEs: 'Toma asiento en esta ___ .', sEn: 'Take a seat on this chair.', hint: 'furniture' },
   { es: 'libro', en: 'book', pos: 'noun', level: 'A1', sEs: 'Este ___ me encanta.', sEn: 'I love this book.', hint: 'reading' },
   { es: 'palabra', en: 'word', pos: 'noun', level: 'A1', sEs: '¿Qué significa esta ___ ?', sEn: 'What does this word mean?', hint: 'language' },
-  { es: 'idioma', en: 'language', pos: 'noun', level: 'A1', sEs: 'El español es un ___ hermoso.', sEn: 'Spanish is a beautiful language.', hint: 'masculine noun' },
-  { es: 'escuela', en: 'school', pos: 'noun', level: 'A1', sEs: 'Los niños van a la ___ .', sEn: 'Children go to school.', hint: 'education' },
-  { es: 'universidad', en: 'university', pos: 'noun', level: 'A2', sEs: 'Estudia derecho en la ___ .', sEn: 'She studies law at university.', hint: 'education' },
-  { es: 'profesor', en: 'teacher / professor', pos: 'noun', level: 'A1', sEs: 'Nuestro ___ explica muy bien.', sEn: 'Our teacher explains very well.', hint: 'profession' },
-  { es: 'médico', en: 'doctor', pos: 'noun', level: 'A1', sEs: 'Tengo cita con el ___ mañana.', sEn: 'I have an appointment with the doctor tomorrow.', hint: 'health' },
-  { es: 'hospital', en: 'hospital', pos: 'noun', level: 'A1', sEs: 'El ___ está a dos kilómetros.', sEn: 'The hospital is two kilometers away.', hint: 'health' },
-  { es: 'salud', en: 'health', pos: 'noun', level: 'A2', sEs: '¡Por la ___ de todos!', sEn: 'To everyone’s health!', hint: 'wellbeing' },
-  { es: 'cuerpo', en: 'body', pos: 'noun', level: 'A2', sEs: 'Es bueno cuidar el ___ .', sEn: 'It is good to take care of the body.', hint: 'anatomy' },
-  { es: 'cabeza', en: 'head', pos: 'noun', level: 'A1', sEs: 'Me duele la ___ hoy.', sEn: 'My head hurts today.', hint: 'anatomy' },
-  { es: 'ojo', en: 'eye', pos: 'noun', level: 'A1', sEs: 'Tiene los ___ verdes.', sEn: 'She has green eyes.', hint: 'anatomy' },
   { es: 'feliz', en: 'happy', pos: 'adjective', level: 'A1', sEs: '¡Que seas muy ___ !', sEn: 'May you be very happy!', hint: 'emotion' },
-  { es: 'triste', en: 'sad', pos: 'adjective', level: 'A1', sEs: 'La película tiene un final ___ .', sEn: 'The movie has a sad ending.', hint: 'emotion' },
-  { es: 'cansado', en: 'tired', pos: 'adjective', level: 'A1', sEs: 'Estoy ___ después del viaje.', sEn: 'I am tired after the trip.', hint: 'state' },
-  { es: 'contento', en: 'glad / pleased', pos: 'adjective', level: 'A1', sEs: 'Estamos muy ___ de verte.', sEn: 'We are very glad to see you.', hint: 'emotion' },
-  { es: 'fuerte', en: 'strong', pos: 'adjective', level: 'A2', sEs: 'Tiene un carácter muy ___ .', sEn: 'He has a very strong character.', hint: 'trait' },
-  { es: 'importante', en: 'important', pos: 'adjective', level: 'A1', sEs: 'Es una decisión muy ___ .', sEn: 'It is a very important decision.', hint: 'priority' },
-  { es: 'necesario', en: 'necessary', pos: 'adjective', level: 'A2', sEs: 'Dormir bien es ___ .', sEn: 'Sleeping well is necessary.', hint: 'need' },
-  { es: 'posible', en: 'possible', pos: 'adjective', level: 'A1', sEs: 'Todo es ___ con esfuerzo.', sEn: 'Everything is possible with effort.', hint: 'possibility' },
-  { es: 'imposible', en: 'impossible', pos: 'adjective', level: 'A2', sEs: 'Nada es ___ si perseveras.', sEn: 'Nothing is impossible if you persevere.', hint: 'possibility' },
-  { es: 'diferente', en: 'different', pos: 'adjective', level: 'A1', sEs: 'Cada cultura es ___ .', sEn: 'Each culture is different.', hint: 'contrast' },
-  { es: 'mismo', en: 'same', pos: 'adjective', level: 'A1', sEs: 'Pensamos lo ___ .', sEn: 'We think the same thing.', hint: 'identity' },
-  { es: 'primero', en: 'first', pos: 'adjective', level: 'A1', sEs: 'Es mi ___ viaje a España.', sEn: 'It is my first trip to Spain.', hint: 'order' },
-  { es: 'último', en: 'last', pos: 'adjective', level: 'A1', sEs: 'Este es el ___ tren de la noche.', sEn: 'This is the last train of the night.', hint: 'order' }
+  { es: 'malo', en: 'bad', pos: 'adjective', level: 'A1', sEs: 'No es un ___ plan.', sEn: 'It is not a bad plan.', hint: 'quality' },
+  { es: 'mismo', en: 'same', pos: 'adjective', level: 'A1', sEs: 'Pensamos lo ___ .', sEn: 'We think the same thing.', hint: 'identity' }
 ];
 
 export function generateExpandedVocabulary(): SpanishWord[] {
-  const dataset = [...CORE_SPANISH_WORDS];
+  const dataset: SpanishWord[] = [...CORE_SPANISH_WORDS];
 
+  // Add expansion vocabulary (ranks 81 to ~130)
   EXPANSION_VOCABULARY.forEach((item, index) => {
     dataset.push({
-      id: `w-exp-${index + 71}`,
+      id: `w-exp-${index + 81}`,
       spanish: item.es,
       english: item.en,
       partOfSpeech: item.pos,
@@ -1000,9 +1455,14 @@ export function generateExpandedVocabulary(): SpanishWord[] {
       sentenceEs: item.sEs,
       sentenceEn: item.sEn,
       hint: item.hint,
-      frequencyRank: index + 71
+      frequencyRank: index + 81,
+      tense: item.pos === 'verb' ? 'infinitive' : 'none'
     });
   });
+
+  // Add complex tense cards (past, imperfect, future) starting at rank 200+
+  // These cards are protected by the SRS vocab threshold (50 words)
+  dataset.push(...COMPLEX_TENSE_WORDS);
 
   return dataset;
 }

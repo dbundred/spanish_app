@@ -260,9 +260,14 @@ export const PracticeCard: React.FC<PracticeCardProps> = ({
 
         <div className="pos-pill-container">
           <div className="pos-pill">
-            <span>{card.partOfSpeech}</span>
+            <span>
+              {card.partOfSpeech === 'verb' && card.tense && card.tense !== 'none'
+                ? `verb • ${card.tense}`
+                : card.partOfSpeech}
+            </span>
             <ChevronRight size={14} />
           </div>
+
 
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             <button className={`audio-btn ${isPlayingSentence ? 'audio-playing' : ''}`} onClick={playAudio} title="Listen to Spanish sentence">

@@ -12,6 +12,17 @@ export type PartOfSpeech =
   | 'conjunction' 
   | 'expression';
 
+export type VerbTense =
+  | 'present'
+  | 'past'
+  | 'future'
+  | 'imperfect'
+  | 'conditional'
+  | 'subjunctive'
+  | 'infinitive'
+  | 'imperative'
+  | 'none';
+
 export interface SpanishWord {
   id: string;
   spanish: string; // Target Spanish word (e.g. "aquí")
@@ -23,6 +34,8 @@ export interface SpanishWord {
   sentenceEnLiteral?: string; // Literal English translation if helpful
   hint?: string; // Context clue or grammar note
   frequencyRank: number; // 1 to 6000
+  tense?: VerbTense; // 'present' | 'past' | 'future' etc.
+  rootVerb?: string; // Lemma / base verb (e.g. 'ser', 'estar', 'tener')
 }
 
 export interface UserProgress {
