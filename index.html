@@ -10,6 +10,27 @@
     <meta name="apple-mobile-web-app-title" content="Lingvist ES" />
     <link rel="manifest" href="/manifest.json" />
     <title>Lingvist Spanish - Adaptive Spaced Repetition</title>
+    <!-- Self-healing handler for stale cached script bundles -->
+    <script>
+      window.addEventListener('error', function(e) {
+        if (e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK')) {
+          console.warn('Asset load failed (possible stale cache). Purging service worker cache & reloading...');
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(regs) {
+              for (var reg of regs) reg.unregister();
+              if ('caches' in window) {
+                caches.keys().then(function(names) {
+                  for (var name of names) caches.delete(name);
+                  window.location.reload();
+                });
+              } else {
+                window.location.reload();
+              }
+            });
+          }
+        }
+      }, true);
+    </script>
   </head>
   <body>
     <div id="root"></div>
@@ -17,8 +38,18 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').catch(err => {
-            console.log('SW registration failed:', err);
+          navigator.serviceWorker.register('/sw.js').then((reg) => {
+            reg.update();
+          }).catch(err => {
+            console.log('SW registration error:', err);
+          });
+
+          let refreshing = false;
+          navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (!refreshing) {
+              refreshing = true;
+              window.location.reload();
+            }
           });
         });
       }
