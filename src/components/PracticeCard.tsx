@@ -26,29 +26,54 @@ export const PracticeCard: React.FC<PracticeCardProps> = ({
   const [isWrongState, setIsWrongState] = useState(false);
   const [isCorrectState, setIsCorrectState] = useState(false);
   const [isAccentWarning, setIsAccentWarning] = useState(false);
+  const [isPlayingSentence, setIsPlayingSentence] = useState(false);
   const [showHint, setShowHint] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const hasAdvancedRef = useRef(false);
+  const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    hasAdvancedRef.current = false;
+    if (advanceTimerRef.current) {
+      clearTimeout(advanceTimerRef.current);
+      advanceTimerRef.current = null;
+    }
+    audioService.stop();
+
     setUserInput('');
     setFirstTry(true);
     setIsWrongState(false);
     setIsCorrectState(false);
     setIsAccentWarning(false);
+    setIsPlayingSentence(false);
     setShowHint(false);
 
     if (inputRef.current) {
       inputRef.current.focus();
     }
 
-    if (settings.autoPronounce) {
-      audioService.speakSpanish(card.sentenceEs, settings.preferredVoice, settings.speechRate);
-    }
-  }, [card, settings.autoPronounce, settings.preferredVoice, settings.speechRate]);
+    return () => {
+      if (advanceTimerRef.current) {
+        clearTimeout(advanceTimerRef.current);
+      }
+      audioService.stop();
+    };
+  }, [card]);
 
   const cleanTarget = card.spanish.trim().toLowerCase();
   const cleanInput = userInput.trim().toLowerCase();
+
+  const advanceCard = (wasFirstTry: boolean, typedText: string) => {
+    if (hasAdvancedRef.current) return;
+    hasAdvancedRef.current = true;
+    if (advanceTimerRef.current) {
+      clearTimeout(advanceTimerRef.current);
+      advanceTimerRef.current = null;
+    }
+    audioService.stop();
+    onCardSubmit(wasFirstTry, typedText);
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -58,43 +83,109 @@ export const PracticeCard: React.FC<PracticeCardProps> = ({
   };
 
   const handleSubmit = () => {
-    if (!cleanInput) return;
+    // 1. If card is already marked correct/warning and sentence is playing,
+    // hitting Enter allows user to advance immediately!
+    if (isCorrectState || isAccentWarning) {
+      advanceCard(firstTry, userInput || card.spanish);
+      return;
+    }
 
-    if (cleanInput === cleanTarget) {
-      // 1. Exact match with correct accents
-      setIsCorrectState(true);
-      setIsWrongState(false);
-      setIsAccentWarning(false);
-
-      if (settings.autoPronounce) {
-        audioService.speakSpanish(card.spanish, settings.preferredVoice, settings.speechRate);
-      }
-
-      setTimeout(() => {
-        onCardSubmit(firstTry, userInput);
-      }, 400);
-    } else if (stripAccents(cleanInput) === stripAccents(cleanTarget)) {
-      // 2. Correct word without accents -> treated as correct, flashes orange with correct accent
-      setIsAccentWarning(true);
-      setIsCorrectState(false);
-      setIsWrongState(false);
-
-      if (settings.autoPronounce) {
-        audioService.speakSpanish(card.spanish, settings.preferredVoice, settings.speechRate);
-      }
-
-      setTimeout(() => {
-        onCardSubmit(firstTry, userInput);
-      }, 1300);
-    } else {
-      // 3. Completely wrong attempt
+    // 2. If user presses Enter without typing anything (default response to not knowing)
+    if (!cleanInput) {
       setIsWrongState(true);
       setIsAccentWarning(false);
       setFirstTry(false);
+
+      if (settings.autoPronounce) {
+        audioService.speakSpanish(card.spanish, settings.preferredVoice, settings.speechRate);
+      }
+
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+      return;
+    }
+
+    const fullSentence = card.sentenceEs.replace('___', card.spanish);
+
+    if (cleanInput === cleanTarget) {
+      // 3. Exact match with correct accents
+      setIsCorrectState(true);
+      setIsWrongState(false);
+      setIsAccentWarning(false);
+      setIsPlayingSentence(true);
+
+      if (settings.autoPronounce) {
+        // Read out the FULL sentence and wait for speech to finish before advancing
+        audioService.speakSpanish(
+          fullSentence,
+          settings.preferredVoice,
+          settings.speechRate,
+          1.0,
+          () => {
+            advanceTimerRef.current = setTimeout(() => {
+              advanceCard(firstTry, userInput);
+            }, 350);
+          }
+        );
+
+        // Safety fallback timer if TTS drops the onend event on mobile browsers
+        const wordCount = fullSentence.split(/\s+/).length;
+        const maxDurationMs = Math.max(3200, wordCount * 650);
+        advanceTimerRef.current = setTimeout(() => {
+          advanceCard(firstTry, userInput);
+        }, maxDurationMs);
+      } else {
+        advanceTimerRef.current = setTimeout(() => {
+          advanceCard(firstTry, userInput);
+        }, 600);
+      }
+    } else if (stripAccents(cleanInput) === stripAccents(cleanTarget)) {
+      // 4. Correct word without accents -> treated as correct, flashes orange with correct accent
+      setIsAccentWarning(true);
+      setIsCorrectState(true);
+      setIsWrongState(false);
+      setIsPlayingSentence(true);
+      setUserInput(card.spanish); // Show correct accent in the blank
+
+      if (settings.autoPronounce) {
+        // Read out the FULL sentence and wait for speech to finish before advancing
+        audioService.speakSpanish(
+          fullSentence,
+          settings.preferredVoice,
+          settings.speechRate,
+          1.0,
+          () => {
+            advanceTimerRef.current = setTimeout(() => {
+              advanceCard(firstTry, card.spanish);
+            }, 500);
+          }
+        );
+
+        const wordCount = fullSentence.split(/\s+/).length;
+        const maxDurationMs = Math.max(3500, wordCount * 650);
+        advanceTimerRef.current = setTimeout(() => {
+          advanceCard(firstTry, card.spanish);
+        }, maxDurationMs);
+      } else {
+        advanceTimerRef.current = setTimeout(() => {
+          advanceCard(firstTry, card.spanish);
+        }, 1200);
+      }
+    } else {
+      // 5. Completely wrong attempt
+      setIsWrongState(true);
+      setIsAccentWarning(false);
+      setFirstTry(false);
+
+      if (settings.autoPronounce) {
+        audioService.speakSpanish(card.spanish, settings.preferredVoice, settings.speechRate);
+      }
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isCorrectState || isAccentWarning) return;
     setUserInput(e.target.value);
     if (isWrongState) {
       setIsWrongState(false);
@@ -102,6 +193,7 @@ export const PracticeCard: React.FC<PracticeCardProps> = ({
   };
 
   const insertAccentChar = (char: string) => {
+    if (isCorrectState || isAccentWarning) return;
     setUserInput(prev => prev + char);
     if (inputRef.current) {
       inputRef.current.focus();
@@ -109,7 +201,10 @@ export const PracticeCard: React.FC<PracticeCardProps> = ({
   };
 
   const playAudio = () => {
-    audioService.speakSpanish(card.sentenceEs, settings.preferredVoice, settings.speechRate);
+    const textToSpeak = (isCorrectState || !firstTry)
+      ? card.sentenceEs.replace('___', card.spanish)
+      : card.sentenceEs.replace('___', '...');
+    audioService.speakSpanish(textToSpeak, settings.preferredVoice, settings.speechRate);
   };
 
   const parts = card.sentenceEs.split('___');
@@ -130,7 +225,7 @@ export const PracticeCard: React.FC<PracticeCardProps> = ({
 
         {isAccentWarning ? (
           <div className="accent-warning-banner">
-            <span>✨ Correct! Check the accent mark:</span>
+            <span>✨ Correct! Notice accent mark:</span>
             <span className="answer-reveal-word" style={{ color: '#b45309', fontWeight: 800 }}>{card.spanish}</span>
           </div>
         ) : (!firstTry || isWrongState) ? (
@@ -147,12 +242,13 @@ export const PracticeCard: React.FC<PracticeCardProps> = ({
               ref={inputRef}
               type="text"
               className={`blank-input ${isWrongState ? 'incorrect-try' : ''} ${
-                isCorrectState ? 'correct-try' : ''
+                isCorrectState && !isAccentWarning ? 'correct-try' : ''
               } ${isAccentWarning ? 'accent-warning' : ''}`}
               value={userInput}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
               placeholder="..."
+              readOnly={isCorrectState || isAccentWarning}
               style={{ width: `${Math.max(100, card.spanish.length * 20)}px` }}
               autoComplete="off"
               autoCorrect="off"
@@ -168,9 +264,22 @@ export const PracticeCard: React.FC<PracticeCardProps> = ({
             <ChevronRight size={14} />
           </div>
 
-          <button className="audio-btn" onClick={playAudio} title="Listen to Spanish sentence">
-            <Volume2 size={16} /> Listen
-          </button>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <button className={`audio-btn ${isPlayingSentence ? 'audio-playing' : ''}`} onClick={playAudio} title="Listen to Spanish sentence">
+              <Volume2 size={16} /> {isPlayingSentence ? 'Playing...' : 'Listen'}
+            </button>
+
+            {(isCorrectState || isAccentWarning) && (
+              <button
+                className="advance-early-btn"
+                onClick={() => advanceCard(firstTry, userInput || card.spanish)}
+                title="Next card (or press Enter)"
+              >
+                <span>Next</span>
+                <ChevronRight size={16} />
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

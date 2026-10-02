@@ -29,8 +29,17 @@ class AudioService {
     });
   }
 
-  public speakSpanish(text: string, preferredVoiceName?: string, rate: number = 0.92, pitch: number = 1.0): void {
-    if (!this.synth) return;
+  public speakSpanish(
+    text: string,
+    preferredVoiceName?: string,
+    rate: number = 0.92,
+    pitch: number = 1.0,
+    onEnd?: () => void
+  ): void {
+    if (!this.synth) {
+      if (onEnd) onEnd();
+      return;
+    }
 
     this.synth.cancel();
 
@@ -54,6 +63,15 @@ class AudioService {
 
     if (chosenVoice) {
       utterance.voice = chosenVoice;
+    }
+
+    if (onEnd) {
+      utterance.onend = () => {
+        onEnd();
+      };
+      utterance.onerror = () => {
+        onEnd();
+      };
     }
 
     this.synth.speak(utterance);
